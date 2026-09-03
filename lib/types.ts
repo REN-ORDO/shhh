@@ -10,6 +10,7 @@ export interface EventRow {
   admin_email: string;
   admin_token: string;
   status: EventStatus;
+  join_code: string | null;
   created_at: string;
 }
 

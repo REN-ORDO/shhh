@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { isValidUuid } from "@/lib/validate";
 import { AutoRefresh } from "@/components/AutoRefresh";
 import { AddParticipantForm } from "@/components/AddParticipantForm";
 import { ParticipantRow } from "@/components/ParticipantRow";
 import { DrawButton } from "@/components/DrawButton";
+import { ShareInviteButton } from "@/components/ShareInviteButton";
 import type { ExclusionRow, ParticipantRow as ParticipantRowType } from "@/lib/types";
 
 export default async function AdminPage({
@@ -68,7 +70,13 @@ export default async function AdminPage({
     cluesCount = count ?? 0;
   }
 
-  const joinLink = `/join/${event.id}`;
+  const headersList = await headers();
+  const host = headersList.get("host");
+  const protocol = host?.startsWith("localhost") ? "http" : "https";
+  const origin = host ? `${protocol}://${host}` : "";
+
+  const joinPath = `/join/${event.id}`;
+  const joinLink = `${origin}${joinPath}`;
 
   return (
     <div className="flex flex-col gap-8 px-6 py-12 max-w-3xl mx-auto">
@@ -110,8 +118,25 @@ export default async function AdminPage({
             Comparte este link con los participantes para que se inscriban:
           </p>
           <code className="border-2 border-border rounded-lg px-3 py-2 bg-white text-sm break-all">
-            {joinLink}
+            {joinPath}
           </code>
+          {event.join_code && (
+            <>
+              <p className="text-sm text-muted">
+                O comparte este código para que lo escriban a mano en la
+                página principal:
+              </p>
+              <code className="border-2 border-border rounded-lg px-3 py-2 bg-white text-sm font-extrabold tracking-widest text-center">
+                {event.join_code}
+              </code>
+            </>
+          )}
+          <ShareInviteButton
+            adminName={event.admin_name}
+            eventName={event.name}
+            joinLink={joinLink}
+            joinCode={event.join_code}
+          />
         </div>
       )}
 
