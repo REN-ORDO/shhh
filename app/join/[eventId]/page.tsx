@@ -25,7 +25,7 @@ export default async function JoinPage({
       <span className="nb-pill">Amigo Secreto Virtual</span>
       <h1 className="text-3xl font-extrabold text-center">{event.name}</h1>
       <p className="text-muted text-center max-w-md">
-        {event.admin_name} te invitó a jugar Amigo Secreto. Completá tus datos
+        {event.admin_name} te invitó a jugar Amigo Secreto. Completa tus datos
         para sumarte al sorteo.
       </p>
 
@@ -33,7 +33,7 @@ export default async function JoinPage({
         <div className="nb-card p-6 max-w-md text-center">
           <p className="font-bold">Las inscripciones para este evento ya cerraron.</p>
           <p className="text-sm text-muted mt-2">
-            Si crees que es un error, contactá a {event.admin_name}, quien
+            Si crees que es un error, contacta a {event.admin_name}, quien
             organiza el evento.
           </p>
         </div>

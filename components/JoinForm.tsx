@@ -26,7 +26,7 @@ export function JoinForm({ eventId }: { eventId: string }) {
           ¡Listo, ya estás inscripto/a!
         </h3>
         <p className="text-sm text-muted">
-          Guardá este link: es tu acceso personal y secreto para ver a quién te
+          Guarda este link: es tu acceso personal y secreto para ver a quién te
           toca regalarle (cuando se haga el sorteo) y para mandar/recibir
           pistas anónimas.
         </p>

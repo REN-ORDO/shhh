@@ -14,7 +14,7 @@ export function CreateEventForm() {
 
   return (
     <form action={formAction} className="nb-card p-6 flex flex-col gap-4 w-full max-w-md">
-      <h3 className="text-xl font-extrabold">Creá tu evento</h3>
+      <h3 className="text-xl font-extrabold">Crea tu evento</h3>
       <div className="flex flex-col gap-1">
         <label htmlFor="name" className="text-sm font-bold">
           Nombre del evento
@@ -48,7 +48,7 @@ export function CreateEventForm() {
           name="adminEmail"
           type="email"
           required
-          placeholder="vos@ejemplo.com"
+          placeholder="tu@ejemplo.com"
           className="border-2 border-border rounded-lg px-3 py-2 bg-white"
         />
       </div>

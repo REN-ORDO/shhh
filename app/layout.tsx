@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Amigo Secreto Virtual",
-  description: "Organizá tu Amigo Secreto online: sorteo automático, pistas anónimas y todo en un link.",
+  description: "Organiza tu Amigo Secreto online: sorteo automático, pistas anónimas y todo en un link.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

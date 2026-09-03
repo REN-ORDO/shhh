@@ -23,11 +23,11 @@ export function SendClueForm({ accessToken }: { accessToken: string }) {
       <input type="hidden" name="accessToken" value={accessToken} />
       <h3 className="font-extrabold flex items-center gap-2">
         <MessageCircleHeart className="size-4 text-accent" aria-hidden="true" />
-        Mandale una pista anónima
+        Mándale una pista anónima
       </h3>
       <p className="text-sm text-muted">
         Tu mensaje se envía sin tu nombre: la otra persona nunca sabrá que lo
-        mandaste vos.
+        mandaste tú.
       </p>
       <textarea
         name="message"

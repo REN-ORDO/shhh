@@ -19,31 +19,31 @@ const FEATURES = [
     icon: Ban,
     title: "Exclusiones",
     description:
-      "¿Parejas o familiares que no deben sortearse entre sí? Configuralo antes del sorteo.",
+      "¿Parejas o familiares que no deben sortearse entre sí? Configúralo antes del sorteo.",
   },
   {
     icon: MessageCircleHeart,
     title: "Pistas anónimas",
     description:
-      "Mandale pistas a quien te tocó, sin revelar quién sos. 100% anónimo.",
+      "Mándale pistas a quien te tocó, sin revelar quién eres. 100% anónimo.",
   },
 ];
 
 const STEPS = [
   {
     number: 1,
-    title: "Creá tu evento",
-    description: "Completá el nombre del evento y tus datos como organizador/a.",
+    title: "Crea tu evento",
+    description: "Completa el nombre del evento y tus datos como organizador/a.",
   },
   {
     number: 2,
-    title: "Compartí el link",
-    description: "Invitá a los participantes con el link de inscripción del evento.",
+    title: "Comparte el link",
+    description: "Invita a los participantes con el link de inscripción del evento.",
   },
   {
     number: 3,
-    title: "Cerrá y sorteá",
-    description: "Cuando estén todos, cerrá inscripciones y hacé el sorteo con un click.",
+    title: "Cierra y sortea",
+    description: "Cuando estén todos, cierra inscripciones y haz el sorteo con un click.",
   },
 ];
 
@@ -62,11 +62,11 @@ export default function Home() {
         <section className="max-w-3xl mx-auto text-center flex flex-col items-center gap-6 pt-8">
           <span className="nb-pill">Amigo Secreto Virtual</span>
           <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight">
-            Organizá tu Amigo Secreto{" "}
+            Organiza tu Amigo Secreto{" "}
             <span className="text-accent">sin planillas ni bolillero</span>
           </h1>
           <p className="text-muted text-lg max-w-xl">
-            Creá tu evento, invitá a tus amigos, familia o compañeros, y dejá que
+            Crea tu evento, invita a tus amigos, familia o compañeros, y deja que
             el sorteo y las pistas anónimas hagan el resto.
           </p>
         </section>
@@ -80,7 +80,7 @@ export default function Home() {
         {/* Features */}
         <section className="max-w-5xl mx-auto w-full">
           <h2 className="text-2xl font-extrabold text-center mb-8">
-            Todo lo que necesitás
+            Todo lo que necesitas
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {FEATURES.map((f) => (
@@ -126,7 +126,7 @@ export default function Home() {
               ¿Listo para armar tu Amigo Secreto?
             </h2>
             <p className="text-muted max-w-md">
-              Es gratis, no necesitás registrarte con contraseña y tenés el
+              Es gratis, no necesitas registrarte con contraseña y tienes el
               control total desde tu link de administrador.
             </p>
             <a
@@ -141,7 +141,7 @@ export default function Home() {
       </main>
 
       <footer className="text-center text-sm text-muted py-8">
-        Amigo Secreto Virtual — organizá tu intercambio de regalos online.
+        Amigo Secreto Virtual — organiza tu intercambio de regalos online.
       </footer>
     </div>
   );

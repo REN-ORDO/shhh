@@ -23,7 +23,7 @@ export async function joinEventAction(
     return { error: "El evento no es válido." };
   }
   if (!name || !email) {
-    return { error: "Completá tu nombre y email." };
+    return { error: "Completa tu nombre y email." };
   }
 
   const { data: event, error: eventError } = await supabaseAdmin
@@ -46,7 +46,7 @@ export async function joinEventAction(
     .single();
 
   if (error || !data) {
-    return { error: "No se pudo completar la inscripción. Intentá de nuevo." };
+    return { error: "No se pudo completar la inscripción. Intenta de nuevo." };
   }
 
   return { accessToken: data.access_token };
@@ -66,7 +66,7 @@ export async function addParticipantAction(
     return { error: "Datos inválidos." };
   }
   if (!name || !email) {
-    return { error: "Completá nombre y email." };
+    return { error: "Completa nombre y email." };
   }
 
   const event = await getEventByAdminToken(adminToken);
@@ -206,7 +206,7 @@ export async function replaceParticipantAction(
     return { error: "Datos inválidos." };
   }
   if (!name || !email) {
-    return { error: "Completá nombre y email." };
+    return { error: "Completa nombre y email." };
   }
 
   const event = await getEventByAdminToken(adminToken);

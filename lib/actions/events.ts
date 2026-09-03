@@ -18,7 +18,7 @@ export async function createEventAction(
   const adminEmail = String(formData.get("adminEmail") ?? "").trim();
 
   if (!name || !adminName || !adminEmail) {
-    return { error: "Completá todos los campos para crear tu evento." };
+    return { error: "Completa todos los campos para crear tu evento." };
   }
 
   const { data, error } = await supabaseAdmin
@@ -50,7 +50,7 @@ export async function goToJoinAction(
   const raw = String(formData.get("eventLink") ?? "").trim();
   const eventId = extractUuid(raw);
   if (!eventId || !isValidUuid(eventId)) {
-    return { error: "Pegá un link de invitación válido." };
+    return { error: "Pega un link de invitación válido." };
   }
   redirect(`/join/${eventId}`);
 }

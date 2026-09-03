@@ -73,7 +73,7 @@ export default async function RevealPage({
           <p className="font-bold">El sorteo todavía no se hizo.</p>
           <p className="text-sm text-muted mt-2">
             En cuanto {event.admin_name} cierre las inscripciones y sortee,
-            vas a ver acá a quién te toca regalarle. Volvé a este mismo link
+            vas a ver acá a quién te toca regalarle. Vuelve a este mismo link
             más tarde.
           </p>
         </div>

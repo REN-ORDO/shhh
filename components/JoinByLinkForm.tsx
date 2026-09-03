@@ -16,7 +16,7 @@ export function JoinByLinkForm() {
     <form action={formAction} className="nb-card p-6 flex flex-col gap-4 w-full max-w-md">
       <h3 className="text-xl font-extrabold">¿Ya te invitaron?</h3>
       <p className="text-sm text-muted">
-        Pegá el link de invitación que te compartió el organizador.
+        Pega el link de invitación que te compartió el organizador.
       </p>
       <input
         name="eventLink"

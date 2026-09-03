@@ -107,7 +107,7 @@ export default async function AdminPage({
         <div className="nb-card p-5 flex flex-col gap-3">
           <h2 className="font-extrabold text-lg">Link de invitación</h2>
           <p className="text-sm text-muted">
-            Compartí este link con los participantes para que se inscriban:
+            Comparte este link con los participantes para que se inscriban:
           </p>
           <code className="border-2 border-border rounded-lg px-3 py-2 bg-white text-sm break-all">
             {joinLink}
@@ -158,7 +158,7 @@ export default async function AdminPage({
 
       {isOpen && list.length < 3 && (
         <p className="text-sm text-muted text-center">
-          Necesitás al menos 3 participantes inscriptos para poder sortear.
+          Necesitas al menos 3 participantes inscriptos para poder sortear.
         </p>
       )}
     </div>
