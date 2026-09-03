@@ -181,6 +181,7 @@ export default async function AdminPage({
                       isOpen={isOpen}
                       adminToken={adminToken}
                       receiverName={receiverByGiver.get(p.id)}
+                      origin={origin}
                     />
                   ))}
                 </ul>

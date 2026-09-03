@@ -10,6 +10,7 @@ import {
 import type { FormState } from "@/lib/actions/events";
 import type { ParticipantRow as ParticipantRowType } from "@/lib/types";
 import { ConfirmButton } from "@/components/ConfirmButton";
+import { CopyField } from "@/components/CopyField";
 
 const initialState: FormState = {};
 
@@ -20,6 +21,7 @@ export function ParticipantRow({
   isOpen,
   adminToken,
   receiverName,
+  origin,
 }: {
   participant: ParticipantRowType;
   allParticipants: ParticipantRowType[];
@@ -27,9 +29,11 @@ export function ParticipantRow({
   isOpen: boolean;
   adminToken: string;
   receiverName?: string | null;
+  origin: string;
 }) {
   const [showExclusions, setShowExclusions] = useState(false);
   const [showReplace, setShowReplace] = useState(false);
+  const [showLink, setShowLink] = useState(false);
 
   const [removeState, removeAction, removePending] = useActionState(
     removeParticipantAction,
@@ -51,8 +55,19 @@ export function ParticipantRow({
               → le regala a: {receiverName}
             </p>
           )}
+          <button
+            type="button"
+            onClick={() => setShowLink((v) => !v)}
+            className="text-sm text-accent font-bold underline mt-1"
+          >
+            {showLink ? "Ocultar link de acceso" : "Ver link de acceso"}
+          </button>
         </div>
       </div>
+
+      {showLink && (
+        <CopyField value={`${origin}/reveal/${participant.access_token}`} />
+      )}
 
       <div className="grid grid-cols-2 gap-2">
         {isOpen && (
@@ -87,7 +102,7 @@ export function ParticipantRow({
             pending={regenPending}
             pendingLabel="..."
             title="¿Regenerar link?"
-            description={`El link de acceso actual de ${participant.name} va a dejar de funcionar y se va a generar uno nuevo. Tendrás que volver a compartírselo.`}
+            description={`El link de acceso actual de ${participant.name} va a dejar de funcionar y se va a generar uno nuevo. Después de confirmar, tocá "Ver link de acceso" para copiar el nuevo y compartírselo.`}
             confirmLabel="Sí, regenerar"
             className="nb-btn nb-btn-secondary px-3 py-2 text-sm w-full disabled:opacity-60"
           >
