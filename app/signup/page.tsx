@@ -4,10 +4,10 @@ import { SignupForm } from "@/components/SignupForm";
 
 export default function SignupPage() {
   return (
-    <div className="relative flex flex-col min-h-screen items-center justify-center px-6 py-12 gap-8">
+    <div className="flex flex-col min-h-screen items-center justify-center px-6 py-12 gap-4">
       <Link
         href="/"
-        className="absolute top-6 left-6 text-sm font-bold text-muted flex items-center gap-1 hover:text-foreground"
+        className="text-sm font-bold text-muted flex items-center gap-1 hover:text-foreground"
       >
         <ArrowLeft className="size-4" aria-hidden="true" />
         Volver al inicio
