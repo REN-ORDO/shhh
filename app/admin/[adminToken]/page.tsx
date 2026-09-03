@@ -5,16 +5,22 @@ import { isValidUuid } from "@/lib/validate";
 import { AutoRefresh } from "@/components/AutoRefresh";
 import { AddParticipantForm } from "@/components/AddParticipantForm";
 import { ParticipantRow } from "@/components/ParticipantRow";
+import { ParticipantsPagination } from "@/components/ParticipantsPagination";
 import { DrawButton } from "@/components/DrawButton";
 import { ShareInviteButton } from "@/components/ShareInviteButton";
 import type { ExclusionRow, ParticipantRow as ParticipantRowType } from "@/lib/types";
 
+const PARTICIPANTS_PER_PAGE = 8;
+
 export default async function AdminPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ adminToken: string }>;
+  searchParams: Promise<{ page?: string }>;
 }) {
   const { adminToken } = await params;
+  const { page } = await searchParams;
 
   if (!isValidUuid(adminToken)) notFound();
 
@@ -33,6 +39,11 @@ export default async function AdminPage({
     .order("joined_at", { ascending: true });
 
   const list: ParticipantRowType[] = participants ?? [];
+
+  const totalPages = Math.max(1, Math.ceil(list.length / PARTICIPANTS_PER_PAGE));
+  const currentPage = Math.min(Math.max(1, Number(page) || 1), totalPages);
+  const pageStart = (currentPage - 1) * PARTICIPANTS_PER_PAGE;
+  const pageList = list.slice(pageStart, pageStart + PARTICIPANTS_PER_PAGE);
 
   const { data: exclusions } = await supabaseAdmin
     .from("exclusions")
@@ -88,7 +99,7 @@ export default async function AdminPage({
         <p className="text-muted">Organiza {event.admin_name}.</p>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[380px_1fr] items-start">
+      <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
         {/* Columna lateral: resumen, invitación y alta de participantes */}
         <div className="flex flex-col gap-6">
           <div className="nb-card p-6 sm:p-8 flex flex-col gap-3">
@@ -152,26 +163,35 @@ export default async function AdminPage({
 
         {/* Columna principal: participantes y sorteo */}
         <div className="flex flex-col gap-6">
-          <div className="nb-card p-6 sm:p-8 flex flex-col gap-4">
+          <div className="nb-card p-6 sm:p-8 flex flex-col gap-4 flex-1">
             <h2 className="font-extrabold text-lg">
               Participantes ({list.length})
             </h2>
             {list.length === 0 ? (
               <p className="text-sm text-muted">Todavía no hay nadie inscripto.</p>
             ) : (
-              <ul className="grid sm:grid-cols-2 gap-4">
-                {list.map((p) => (
-                  <ParticipantRow
-                    key={p.id}
-                    participant={p}
-                    allParticipants={list}
-                    excludedIds={exclusionsByParticipant.get(p.id) ?? []}
-                    isOpen={isOpen}
+              <>
+                <ul className="grid sm:grid-cols-2 gap-4 content-start flex-1">
+                  {pageList.map((p) => (
+                    <ParticipantRow
+                      key={p.id}
+                      participant={p}
+                      allParticipants={list}
+                      excludedIds={exclusionsByParticipant.get(p.id) ?? []}
+                      isOpen={isOpen}
+                      adminToken={adminToken}
+                      receiverName={receiverByGiver.get(p.id)}
+                    />
+                  ))}
+                </ul>
+                {totalPages > 1 && (
+                  <ParticipantsPagination
                     adminToken={adminToken}
-                    receiverName={receiverByGiver.get(p.id)}
+                    currentPage={currentPage}
+                    totalPages={totalPages}
                   />
-                ))}
-              </ul>
+                )}
+              </>
             )}
           </div>
 

@@ -24,26 +24,26 @@ export function AddParticipantForm({
   }, initialState);
 
   return (
-    <form ref={formRef} action={formAction} className="flex flex-col sm:flex-row gap-2">
+    <form ref={formRef} action={formAction} className="flex flex-col gap-2">
       <input type="hidden" name="eventId" value={eventId} />
       <input type="hidden" name="adminToken" value={adminToken} />
       <input
         name="name"
         required
         placeholder="Nombre"
-        className="border-2 border-border rounded-lg px-3 py-2 bg-white flex-1"
+        className="border-2 border-border rounded-lg px-3 py-2 bg-white w-full"
       />
       <input
         name="email"
         type="email"
         required
         placeholder="Email"
-        className="border-2 border-border rounded-lg px-3 py-2 bg-white flex-1"
+        className="border-2 border-border rounded-lg px-3 py-2 bg-white w-full"
       />
-      <button type="submit" disabled={pending} className="nb-btn nb-btn-primary px-4 py-2 whitespace-nowrap disabled:opacity-60">
+      <button type="submit" disabled={pending} className="nb-btn nb-btn-primary px-4 py-2 disabled:opacity-60">
         {pending ? "Agregando..." : "Agregar"}
       </button>
-      {state.error && <p className="text-accent font-bold text-sm sm:hidden">{state.error}</p>}
+      {state.error && <p className="text-accent font-bold text-sm">{state.error}</p>}
     </form>
   );
 }
