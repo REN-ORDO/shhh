@@ -5,20 +5,20 @@ import { SignupForm } from "@/components/SignupForm";
 export default function SignupPage() {
   return (
     <div className="flex flex-col min-h-screen items-center justify-center px-6 py-12 gap-4">
-      <Link
-        href="/"
-        className="text-sm font-bold text-muted flex items-center gap-1 hover:text-foreground"
-      >
-        <ArrowLeft className="size-4" aria-hidden="true" />
-        Volver al inicio
-      </Link>
-
       <Link href="/" className="text-lg font-extrabold flex items-center gap-2">
         <Gift className="size-5" aria-hidden="true" />
         Amigo Secreto
       </Link>
 
       <div className="flex flex-col items-center gap-6 w-full max-w-md">
+        <Link
+          href="/"
+          className="self-start text-sm font-bold text-muted flex items-center gap-1 hover:text-foreground"
+        >
+          <ArrowLeft className="size-4" aria-hidden="true" />
+          Volver al inicio
+        </Link>
+
         <div className="text-center flex flex-col gap-2">
           <span className="nb-pill self-center">Organizador/a</span>
           <h1 className="text-2xl font-extrabold">Crea tu cuenta</h1>
