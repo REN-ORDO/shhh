@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { Hand, Gift } from "lucide-react";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { isValidUuid } from "@/lib/validate";
 import { SendClueForm } from "@/components/SendClueForm";
@@ -62,8 +63,9 @@ export default async function RevealPage({
   return (
     <div className="flex flex-col items-center gap-8 px-6 py-16 max-w-xl mx-auto">
       <span className="nb-pill">{event.name}</span>
-      <h1 className="text-2xl font-extrabold text-center">
-        Hola, {participant.name} 👋
+      <h1 className="text-2xl font-extrabold text-center flex items-center gap-2">
+        Hola, {participant.name}
+        <Hand className="size-6 text-accent" aria-hidden="true" />
       </h1>
 
       {event.status !== "closed" ? (
@@ -88,7 +90,10 @@ export default async function RevealPage({
             <SendClueForm accessToken={accessToken} />
 
             <div className="nb-card p-5 flex flex-col gap-3">
-              <h3 className="font-extrabold">Mensajes de tu Amigo Secreto 🎁</h3>
+              <h3 className="font-extrabold flex items-center gap-2">
+                <Gift className="size-4 text-accent" aria-hidden="true" />
+                Mensajes de tu Amigo Secreto
+              </h3>
               {!inboxClues || inboxClues.length === 0 ? (
                 <p className="text-sm text-muted">
                   Todavía no recibiste ninguna pista.

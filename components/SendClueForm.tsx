@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useRef } from "react";
+import { MessageCircleHeart } from "lucide-react";
 import { sendClueAction } from "@/lib/actions/clues";
 import type { FormState } from "@/lib/actions/events";
 
@@ -20,7 +21,10 @@ export function SendClueForm({ accessToken }: { accessToken: string }) {
   return (
     <form ref={formRef} action={formAction} className="nb-card p-5 flex flex-col gap-3">
       <input type="hidden" name="accessToken" value={accessToken} />
-      <h3 className="font-extrabold">Mandale una pista anónima 💌</h3>
+      <h3 className="font-extrabold flex items-center gap-2">
+        <MessageCircleHeart className="size-4 text-accent" aria-hidden="true" />
+        Mandale una pista anónima
+      </h3>
       <p className="text-sm text-muted">
         Tu mensaje se envía sin tu nombre: la otra persona nunca sabrá que lo
         mandaste vos.

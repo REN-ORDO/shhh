@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { Gift } from "lucide-react";
 import { createEventAction, type FormState } from "@/lib/actions/events";
 
 const initialState: FormState = {};
@@ -52,8 +53,19 @@ export function CreateEventForm() {
         />
       </div>
       {state.error && <p className="text-accent font-bold text-sm">{state.error}</p>}
-      <button type="submit" disabled={pending} className="nb-btn nb-btn-primary px-5 py-3 disabled:opacity-60">
-        {pending ? "Creando..." : "Crear mi evento 🎁"}
+      <button
+        type="submit"
+        disabled={pending}
+        className="nb-btn nb-btn-primary px-5 py-3 disabled:opacity-60 flex items-center justify-center gap-2"
+      >
+        {pending ? (
+          "Creando..."
+        ) : (
+          <>
+            <Gift className="size-4" aria-hidden="true" />
+            Crear mi evento
+          </>
+        )}
       </button>
     </form>
   );

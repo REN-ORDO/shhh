@@ -1,27 +1,28 @@
+import { Dices, Lock, Ban, MessageCircleHeart, Gift } from "lucide-react";
 import { CreateEventForm } from "@/components/CreateEventForm";
 import { JoinByLinkForm } from "@/components/JoinByLinkForm";
 
 const FEATURES = [
   {
-    icon: "🎲",
+    icon: Dices,
     title: "Sorteo automático",
     description:
       "Un click y listo: cada participante recibe a quién le toca regalar, sin repetidos.",
   },
   {
-    icon: "🔒",
+    icon: Lock,
     title: "Links individuales",
     description:
       "Cada persona tiene su propio link secreto para ver su resultado. Nadie más lo puede ver.",
   },
   {
-    icon: "🚫",
+    icon: Ban,
     title: "Exclusiones",
     description:
       "¿Parejas o familiares que no deben sortearse entre sí? Configuralo antes del sorteo.",
   },
   {
-    icon: "💌",
+    icon: MessageCircleHeart,
     title: "Pistas anónimas",
     description:
       "Mandale pistas a quien te tocó, sin revelar quién sos. 100% anónimo.",
@@ -50,7 +51,10 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       <header className="w-full px-6 py-5 flex items-center justify-between max-w-5xl mx-auto">
-        <span className="text-lg font-extrabold">🎁 Amigo Secreto</span>
+        <span className="text-lg font-extrabold flex items-center gap-2">
+          <Gift className="size-5" aria-hidden="true" />
+          Amigo Secreto
+        </span>
       </header>
 
       <main className="flex flex-col gap-20 px-6 pb-20">
@@ -81,7 +85,9 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {FEATURES.map((f) => (
               <div key={f.title} className="nb-card p-5 flex flex-col gap-3">
-                <span className="nb-icon-circle">{f.icon}</span>
+                <span className="nb-icon-circle">
+                  <f.icon className="size-5" aria-hidden="true" />
+                </span>
                 <h3 className="font-extrabold">{f.title}</h3>
                 <p className="text-sm text-muted">{f.description}</p>
               </div>
@@ -123,8 +129,12 @@ export default function Home() {
               Es gratis, no necesitás registrarte con contraseña y tenés el
               control total desde tu link de administrador.
             </p>
-            <a href="#top" className="nb-btn nb-btn-primary px-6 py-3">
-              Crear mi evento 🎁
+            <a
+              href="#top"
+              className="nb-btn nb-btn-primary px-6 py-3 flex items-center gap-2"
+            >
+              <Gift className="size-4" aria-hidden="true" />
+              Crear mi evento
             </a>
           </div>
         </section>

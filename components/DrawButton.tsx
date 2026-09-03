@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { Dices } from "lucide-react";
 import { closeAndDrawAction } from "@/lib/actions/draw";
 import type { FormState } from "@/lib/actions/events";
 
@@ -24,9 +25,16 @@ export function DrawButton({ adminToken }: { adminToken: string }) {
             e.preventDefault();
           }
         }}
-        className="nb-btn nb-btn-primary px-5 py-3 disabled:opacity-60"
+        className="nb-btn nb-btn-primary px-5 py-3 disabled:opacity-60 flex items-center justify-center gap-2"
       >
-        {pending ? "Sorteando..." : "Cerrar inscripciones y sortear 🎲"}
+        {pending ? (
+          "Sorteando..."
+        ) : (
+          <>
+            <Dices className="size-4" aria-hidden="true" />
+            Cerrar inscripciones y sortear
+          </>
+        )}
       </button>
     </form>
   );
