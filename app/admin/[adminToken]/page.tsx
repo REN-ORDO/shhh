@@ -79,7 +79,7 @@ export default async function AdminPage({
   const joinLink = `${origin}${joinPath}`;
 
   return (
-    <div className="flex flex-col gap-10 px-6 sm:px-8 lg:px-10 py-12 lg:py-16 max-w-5xl mx-auto">
+    <div className="flex flex-col gap-8 px-6 sm:px-8 lg:px-10 py-12 lg:py-16 max-w-6xl mx-auto">
       <AutoRefresh />
 
       <div className="flex flex-col gap-3">
@@ -88,104 +88,111 @@ export default async function AdminPage({
         <p className="text-muted">Organiza {event.admin_name}.</p>
       </div>
 
-      {/* Dashboard resumen */}
-      <div className="nb-card p-6 sm:p-8 flex flex-col gap-3">
-        <h2 className="font-extrabold text-lg">Resumen</h2>
-        <ul className="divide-y-2 divide-border/20 text-sm">
-          <li className="py-3 flex justify-between">
-            <span>Estado</span>
-            <span className="font-bold">
-              {isOpen ? "Inscripciones abiertas" : "Sorteo realizado"}
-            </span>
-          </li>
-          <li className="py-3 flex justify-between">
-            <span>Inscriptos</span>
-            <span className="font-bold">{list.length}</span>
-          </li>
-          {!isOpen && (
-            <li className="py-3 flex justify-between">
-              <span>Pistas enviadas</span>
-              <span className="font-bold">{cluesCount}</span>
-            </li>
-          )}
-        </ul>
-      </div>
+      <div className="grid gap-6 lg:grid-cols-[380px_1fr] items-start">
+        {/* Columna lateral: resumen, invitación y alta de participantes */}
+        <div className="flex flex-col gap-6">
+          <div className="nb-card p-6 sm:p-8 flex flex-col gap-3">
+            <h2 className="font-extrabold text-lg">Resumen</h2>
+            <ul className="divide-y-2 divide-border/20 text-sm">
+              <li className="py-3 flex justify-between">
+                <span>Estado</span>
+                <span className="font-bold">
+                  {isOpen ? "Inscripciones abiertas" : "Sorteo realizado"}
+                </span>
+              </li>
+              <li className="py-3 flex justify-between">
+                <span>Inscriptos</span>
+                <span className="font-bold">{list.length}</span>
+              </li>
+              {!isOpen && (
+                <li className="py-3 flex justify-between">
+                  <span>Pistas enviadas</span>
+                  <span className="font-bold">{cluesCount}</span>
+                </li>
+              )}
+            </ul>
+          </div>
 
-      {isOpen && (
-        <div className="nb-card p-6 sm:p-8 flex flex-col gap-4">
-          <h2 className="font-extrabold text-lg">Link de invitación</h2>
-          <p className="text-sm text-muted">
-            Comparte este link con los participantes para que se inscriban:
-          </p>
-          <code className="border-2 border-border rounded-lg px-3 py-2 bg-white text-sm break-all">
-            {joinPath}
-          </code>
-          {event.join_code && (
-            <>
+          {isOpen && (
+            <div className="nb-card p-6 sm:p-8 flex flex-col gap-4">
+              <h2 className="font-extrabold text-lg">Link de invitación</h2>
               <p className="text-sm text-muted">
-                O comparte este código para que lo escriban a mano en la
-                página principal:
+                Comparte este link con los participantes para que se inscriban:
               </p>
-              <code className="border-2 border-border rounded-lg px-3 py-2 bg-white text-sm font-extrabold tracking-widest text-center">
-                {event.join_code}
+              <code className="border-2 border-border rounded-lg px-3 py-2 bg-white text-sm break-all">
+                {joinPath}
               </code>
-            </>
-          )}
-          <ShareInviteButton
-            adminName={event.admin_name}
-            eventName={event.name}
-            joinLink={joinLink}
-            joinCode={event.join_code}
-          />
-        </div>
-      )}
-
-      {isOpen && (
-        <div className="nb-card p-6 sm:p-8 flex flex-col gap-4">
-          <h2 className="font-extrabold text-lg">Agregar participante</h2>
-          <AddParticipantForm eventId={event.id} adminToken={adminToken} />
-        </div>
-      )}
-
-      <div className="nb-card p-6 sm:p-8 flex flex-col gap-4">
-        <h2 className="font-extrabold text-lg">
-          Participantes ({list.length})
-        </h2>
-        {list.length === 0 ? (
-          <p className="text-sm text-muted">Todavía no hay nadie inscripto.</p>
-        ) : (
-          <ul className="flex flex-col gap-4">
-            {list.map((p) => (
-              <ParticipantRow
-                key={p.id}
-                participant={p}
-                allParticipants={list}
-                excludedIds={exclusionsByParticipant.get(p.id) ?? []}
-                isOpen={isOpen}
-                adminToken={adminToken}
-                receiverName={receiverByGiver.get(p.id)}
+              {event.join_code && (
+                <>
+                  <p className="text-sm text-muted">
+                    O comparte este código para que lo escriban a mano en la
+                    página principal:
+                  </p>
+                  <code className="border-2 border-border rounded-lg px-3 py-2 bg-white text-sm font-extrabold tracking-widest text-center">
+                    {event.join_code}
+                  </code>
+                </>
+              )}
+              <ShareInviteButton
+                adminName={event.admin_name}
+                eventName={event.name}
+                joinLink={joinLink}
+                joinCode={event.join_code}
               />
-            ))}
-          </ul>
-        )}
-      </div>
+            </div>
+          )}
 
-      {isOpen && list.length >= 3 && (
-        <div className="nb-card p-6 sm:p-8 flex flex-col gap-4">
-          <h2 className="font-extrabold text-lg">Sorteo</h2>
-          <p className="text-sm text-muted">
-            Una vez que cierres inscripciones y sortees, no vas a poder agregar
-            ni eliminar participantes.
-          </p>
-          <DrawButton adminToken={adminToken} />
+          {isOpen && (
+            <div className="nb-card p-6 sm:p-8 flex flex-col gap-4">
+              <h2 className="font-extrabold text-lg">Agregar participante</h2>
+              <AddParticipantForm eventId={event.id} adminToken={adminToken} />
+            </div>
+          )}
         </div>
-      )}
 
-      {isOpen && list.length < 3 && (
-        <p className="text-sm text-muted text-center">
-          Necesitas al menos 3 participantes inscriptos para poder sortear.
-        </p>
-      )}
+        {/* Columna principal: participantes y sorteo */}
+        <div className="flex flex-col gap-6">
+          <div className="nb-card p-6 sm:p-8 flex flex-col gap-4">
+            <h2 className="font-extrabold text-lg">
+              Participantes ({list.length})
+            </h2>
+            {list.length === 0 ? (
+              <p className="text-sm text-muted">Todavía no hay nadie inscripto.</p>
+            ) : (
+              <ul className="grid sm:grid-cols-2 gap-4">
+                {list.map((p) => (
+                  <ParticipantRow
+                    key={p.id}
+                    participant={p}
+                    allParticipants={list}
+                    excludedIds={exclusionsByParticipant.get(p.id) ?? []}
+                    isOpen={isOpen}
+                    adminToken={adminToken}
+                    receiverName={receiverByGiver.get(p.id)}
+                  />
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {isOpen && list.length >= 3 && (
+            <div className="nb-card p-6 sm:p-8 flex flex-col gap-4">
+              <h2 className="font-extrabold text-lg">Sorteo</h2>
+              <p className="text-sm text-muted">
+                Una vez que cierres inscripciones y sortees, no vas a poder
+                agregar ni eliminar participantes.
+              </p>
+              <DrawButton adminToken={adminToken} />
+            </div>
+          )}
+
+          {isOpen && list.length < 3 && (
+            <p className="text-sm text-muted text-center">
+              Necesitas al menos 3 participantes inscriptos para poder sortear.
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
