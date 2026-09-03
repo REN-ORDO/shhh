@@ -92,7 +92,7 @@ export default async function Home() {
         </section>
 
         {/* CTAs */}
-        <section className="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 w-full">
+        <section id="top" className="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 w-full scroll-mt-24">
           <CreateEventForm
             organizerEmail={user?.email}
           />
