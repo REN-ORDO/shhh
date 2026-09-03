@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { LogIn } from "lucide-react";
 import { signInAction } from "@/lib/actions/auth";
 import type { AuthFormState } from "@/lib/actions/auth";
+import { PasswordInput } from "@/components/PasswordInput";
 
 const initialState: AuthFormState = {};
 
@@ -29,13 +30,11 @@ export function LoginForm() {
         <label htmlFor="password" className="text-sm font-bold">
           Contraseña
         </label>
-        <input
+        <PasswordInput
           id="password"
           name="password"
-          type="password"
           required
           placeholder="••••••••"
-          className="border-2 border-border rounded-lg px-3 py-2 bg-white"
         />
       </div>
       {state.error && <p className="text-accent font-bold text-sm">{state.error}</p>}

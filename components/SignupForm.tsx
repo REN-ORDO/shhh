@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { UserPlus } from "lucide-react";
 import { signUpAction } from "@/lib/actions/auth";
 import type { AuthFormState } from "@/lib/actions/auth";
+import { PasswordInput } from "@/components/PasswordInput";
 
 const initialState: AuthFormState = {};
 
@@ -41,14 +42,12 @@ export function SignupForm() {
         <label htmlFor="password" className="text-sm font-bold">
           Contraseña
         </label>
-        <input
+        <PasswordInput
           id="password"
           name="password"
-          type="password"
           required
           minLength={6}
           placeholder="Al menos 6 caracteres"
-          className="border-2 border-border rounded-lg px-3 py-2 bg-white"
         />
       </div>
       {state.error && <p className="text-accent font-bold text-sm">{state.error}</p>}
