@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Gift, SearchX, Home } from "lucide-react";
+import { BackButton } from "@/components/BackButton";
 
 export default function NotFound() {
   return (
@@ -22,13 +23,16 @@ export default function NotFound() {
         </p>
       </div>
 
-      <Link
-        href="/"
-        className="nb-btn nb-btn-primary px-6 py-3 flex items-center gap-2"
-      >
-        <Home className="size-4" aria-hidden="true" />
-        Ir al inicio
-      </Link>
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <BackButton />
+        <Link
+          href="/"
+          className="nb-btn nb-btn-primary px-6 py-3 flex items-center gap-2"
+        >
+          <Home className="size-4" aria-hidden="true" />
+          Ir al inicio
+        </Link>
+      </div>
     </div>
   );
 }

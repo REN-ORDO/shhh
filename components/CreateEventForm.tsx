@@ -7,14 +7,11 @@ import { createEventAction, type FormState } from "@/lib/actions/events";
 const initialState: FormState = {};
 
 interface CreateEventFormProps {
-  /** Nombre del organizador logueado, para prellenar el campo. */
-  defaultAdminName?: string;
   /** Email del organizador logueado, mostrado solo a modo informativo. */
   organizerEmail?: string;
 }
 
 export function CreateEventForm({
-  defaultAdminName,
   organizerEmail,
 }: CreateEventFormProps = {}) {
   const [state, formAction, pending] = useActionState(
@@ -34,19 +31,6 @@ export function CreateEventForm({
           name="name"
           required
           placeholder="Amigo Secreto Oficina 2026"
-          className="border-2 border-border rounded-lg px-3 py-2 bg-white"
-        />
-      </div>
-      <div className="flex flex-col gap-1">
-        <label htmlFor="adminName" className="text-sm font-bold">
-          Tu nombre (organizador/a)
-        </label>
-        <input
-          id="adminName"
-          name="adminName"
-          required
-          defaultValue={defaultAdminName}
-          placeholder="Tu nombre"
           className="border-2 border-border rounded-lg px-3 py-2 bg-white"
         />
       </div>

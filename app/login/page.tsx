@@ -15,7 +15,7 @@ export default function LoginPage() {
           <span className="nb-pill self-center">Organizador/a</span>
           <h1 className="text-2xl font-extrabold">Inicia sesión</h1>
           <p className="text-muted text-sm">
-            Accedé a tus eventos aunque hayas perdido el link de administración.
+            Accede a tus eventos aunque hayas perdido el link de administración.
           </p>
         </div>
 

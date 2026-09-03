@@ -28,9 +28,7 @@ export async function createEventAction(
   }
 
   const name = String(formData.get("name") ?? "").trim();
-  const adminName =
-    String(formData.get("adminName") ?? "").trim() ||
-    String(user.user_metadata?.name ?? "").trim();
+  const adminName = String(user.user_metadata?.name ?? "").trim();
   const adminEmail = String(user.email ?? "").trim();
 
   if (!name || !adminName || !adminEmail) {
