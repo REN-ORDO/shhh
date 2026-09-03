@@ -79,31 +79,31 @@ export default async function AdminPage({
   const joinLink = `${origin}${joinPath}`;
 
   return (
-    <div className="flex flex-col gap-8 px-6 py-12 max-w-3xl mx-auto">
+    <div className="flex flex-col gap-10 px-6 sm:px-8 lg:px-10 py-12 lg:py-16 max-w-5xl mx-auto">
       <AutoRefresh />
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-3">
         <span className="nb-pill self-start">Panel de administración</span>
-        <h1 className="text-3xl font-extrabold">{event.name}</h1>
+        <h1 className="text-3xl lg:text-4xl font-extrabold">{event.name}</h1>
         <p className="text-muted">Organiza {event.admin_name}.</p>
       </div>
 
       {/* Dashboard resumen */}
-      <div className="nb-card p-5 flex flex-col gap-2">
+      <div className="nb-card p-6 sm:p-8 flex flex-col gap-3">
         <h2 className="font-extrabold text-lg">Resumen</h2>
         <ul className="divide-y-2 divide-border/20 text-sm">
-          <li className="py-2 flex justify-between">
+          <li className="py-3 flex justify-between">
             <span>Estado</span>
             <span className="font-bold">
               {isOpen ? "Inscripciones abiertas" : "Sorteo realizado"}
             </span>
           </li>
-          <li className="py-2 flex justify-between">
+          <li className="py-3 flex justify-between">
             <span>Inscriptos</span>
             <span className="font-bold">{list.length}</span>
           </li>
           {!isOpen && (
-            <li className="py-2 flex justify-between">
+            <li className="py-3 flex justify-between">
               <span>Pistas enviadas</span>
               <span className="font-bold">{cluesCount}</span>
             </li>
@@ -112,7 +112,7 @@ export default async function AdminPage({
       </div>
 
       {isOpen && (
-        <div className="nb-card p-5 flex flex-col gap-3">
+        <div className="nb-card p-6 sm:p-8 flex flex-col gap-4">
           <h2 className="font-extrabold text-lg">Link de invitación</h2>
           <p className="text-sm text-muted">
             Comparte este link con los participantes para que se inscriban:
@@ -141,20 +141,20 @@ export default async function AdminPage({
       )}
 
       {isOpen && (
-        <div className="nb-card p-5 flex flex-col gap-3">
+        <div className="nb-card p-6 sm:p-8 flex flex-col gap-4">
           <h2 className="font-extrabold text-lg">Agregar participante</h2>
           <AddParticipantForm eventId={event.id} adminToken={adminToken} />
         </div>
       )}
 
-      <div className="nb-card p-5 flex flex-col gap-3">
+      <div className="nb-card p-6 sm:p-8 flex flex-col gap-4">
         <h2 className="font-extrabold text-lg">
           Participantes ({list.length})
         </h2>
         {list.length === 0 ? (
           <p className="text-sm text-muted">Todavía no hay nadie inscripto.</p>
         ) : (
-          <ul className="flex flex-col gap-3">
+          <ul className="flex flex-col gap-4">
             {list.map((p) => (
               <ParticipantRow
                 key={p.id}
@@ -171,7 +171,7 @@ export default async function AdminPage({
       </div>
 
       {isOpen && list.length >= 3 && (
-        <div className="nb-card p-5 flex flex-col gap-3">
+        <div className="nb-card p-6 sm:p-8 flex flex-col gap-4">
           <h2 className="font-extrabold text-lg">Sorteo</h2>
           <p className="text-sm text-muted">
             Una vez que cierres inscripciones y sortees, no vas a poder agregar

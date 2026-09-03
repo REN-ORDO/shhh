@@ -40,7 +40,7 @@ export function ParticipantRow({
   );
 
   return (
-    <li className="border-2 border-border rounded-lg p-4 flex flex-col gap-3">
+    <li className="border-2 border-border rounded-lg p-4 sm:p-5 flex flex-col gap-3">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
           <p className="font-bold">{participant.name}</p>
