@@ -9,6 +9,7 @@ import {
 } from "@/lib/actions/participants";
 import type { FormState } from "@/lib/actions/events";
 import type { ParticipantRow as ParticipantRowType } from "@/lib/types";
+import { ConfirmButton } from "@/components/ConfirmButton";
 
 const initialState: FormState = {};
 
@@ -51,48 +52,55 @@ export function ParticipantRow({
             </p>
           )}
         </div>
-        <div className="flex gap-2 flex-wrap">
-          {isOpen && (
-            <button
-              type="button"
-              onClick={() => setShowExclusions((v) => !v)}
-              className="nb-btn nb-btn-secondary px-3 py-1 text-sm"
-            >
-              Exclusiones
-            </button>
-          )}
-          {isOpen && (
-            <form action={removeAction}>
-              <input type="hidden" name="participantId" value={participant.id} />
-              <input type="hidden" name="adminToken" value={adminToken} />
-              <button
-                type="submit"
-                disabled={removePending}
-                className="nb-btn nb-btn-secondary px-3 py-1 text-sm disabled:opacity-60"
-              >
-                {removePending ? "..." : "Eliminar"}
-              </button>
-            </form>
-          )}
-          <form action={regenAction}>
-            <input type="hidden" name="participantId" value={participant.id} />
-            <input type="hidden" name="adminToken" value={adminToken} />
-            <button
-              type="submit"
-              disabled={regenPending}
-              className="nb-btn nb-btn-secondary px-3 py-1 text-sm disabled:opacity-60"
-            >
-              {regenPending ? "..." : "Regenerar link"}
-            </button>
-          </form>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        {isOpen && (
           <button
             type="button"
-            onClick={() => setShowReplace((v) => !v)}
-            className="nb-btn nb-btn-secondary px-3 py-1 text-sm"
+            onClick={() => setShowExclusions((v) => !v)}
+            className="nb-btn nb-btn-secondary px-3 py-2 text-sm w-full"
           >
-            Reemplazar
+            Exclusiones
           </button>
-        </div>
+        )}
+        {isOpen && (
+          <form action={removeAction}>
+            <input type="hidden" name="participantId" value={participant.id} />
+            <input type="hidden" name="adminToken" value={adminToken} />
+            <ConfirmButton
+              pending={removePending}
+              pendingLabel="..."
+              title="¿Eliminar participante?"
+              description={`${participant.name} va a quedar fuera del evento y su link de acceso dejará de funcionar. Esta acción no se puede deshacer.`}
+              confirmLabel="Sí, eliminar"
+              className="nb-btn nb-btn-secondary px-3 py-2 text-sm w-full disabled:opacity-60"
+            >
+              Eliminar
+            </ConfirmButton>
+          </form>
+        )}
+        <form action={regenAction}>
+          <input type="hidden" name="participantId" value={participant.id} />
+          <input type="hidden" name="adminToken" value={adminToken} />
+          <ConfirmButton
+            pending={regenPending}
+            pendingLabel="..."
+            title="¿Regenerar link?"
+            description={`El link de acceso actual de ${participant.name} va a dejar de funcionar y se va a generar uno nuevo. Tendrás que volver a compartírselo.`}
+            confirmLabel="Sí, regenerar"
+            className="nb-btn nb-btn-secondary px-3 py-2 text-sm w-full disabled:opacity-60"
+          >
+            Regenerar link
+          </ConfirmButton>
+        </form>
+        <button
+          type="button"
+          onClick={() => setShowReplace((v) => !v)}
+          className="nb-btn nb-btn-secondary px-3 py-2 text-sm w-full"
+        >
+          Reemplazar
+        </button>
       </div>
 
       {removeState.error && <p className="text-accent font-bold text-sm">{removeState.error}</p>}
@@ -172,25 +180,32 @@ function ReplaceForm({
   );
 
   return (
-    <form action={formAction} className="border-t-2 border-border pt-3 flex flex-col sm:flex-row gap-2">
+    <form action={formAction} className="border-t-2 border-border pt-3 flex flex-col gap-2">
       <input type="hidden" name="participantId" value={participant.id} />
       <input type="hidden" name="adminToken" value={adminToken} />
       <input
         name="name"
         required
         placeholder="Nuevo nombre"
-        className="border-2 border-border rounded-lg px-3 py-2 bg-white flex-1"
+        className="border-2 border-border rounded-lg px-3 py-2 bg-white w-full"
       />
       <input
         name="email"
         type="email"
         required
         placeholder="Nuevo email"
-        className="border-2 border-border rounded-lg px-3 py-2 bg-white flex-1"
+        className="border-2 border-border rounded-lg px-3 py-2 bg-white w-full"
       />
-      <button type="submit" disabled={pending} className="nb-btn nb-btn-primary px-4 py-2 text-sm whitespace-nowrap disabled:opacity-60">
-        {pending ? "..." : "Confirmar reemplazo"}
-      </button>
+      <ConfirmButton
+        pending={pending}
+        pendingLabel="..."
+        title="¿Reemplazar participante?"
+        description={`Se va a reemplazar a ${participant.name} por los nuevos datos, manteniendo su lugar en el sorteo (mismo id). Se le va a generar un link de acceso nuevo.`}
+        confirmLabel="Sí, reemplazar"
+        className="nb-btn nb-btn-primary px-4 py-2 text-sm disabled:opacity-60"
+      >
+        Confirmar reemplazo
+      </ConfirmButton>
       {state.error && <p className="text-accent font-bold text-sm">{state.error}</p>}
     </form>
   );

@@ -44,7 +44,7 @@ body {
   border-radius: 0.75rem;
   font-weight: 700;
   box-shadow: 4px 4px 0 0 var(--border);
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.15s ease, color 0.15s ease;
   cursor: pointer;
 }
 
@@ -63,9 +63,26 @@ body {
   color: white;
 }
 
+.nb-btn-primary:hover {
+  background: color-mix(in srgb, var(--accent) 85%, black);
+}
+
+.nb-btn-primary:active {
+  background: color-mix(in srgb, var(--accent) 70%, black);
+}
+
 .nb-btn-secondary {
   background: white;
   color: var(--foreground);
+}
+
+.nb-btn-secondary:hover {
+  background: var(--accent-light);
+}
+
+.nb-btn-secondary:active {
+  background: var(--accent);
+  color: white;
 }
 
 .nb-pill {
