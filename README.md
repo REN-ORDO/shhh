@@ -18,11 +18,24 @@ pegar → Run). Esto crea las tablas `events`, `participants`, `assignments`,
 `exclusions`, `clues`, con RLS habilitado (deny-all por defecto; el acceso
 real de la app pasa por la service role key en Server Actions).
 
+Después, corré también `supabase/migrations/0002_auth.sql` (mismo proceso:
+pegar en el SQL Editor y ejecutar). Esta migración agrega la columna
+`owner_id` a `events` y una policy de RLS para que cada organizador pueda
+leer sus propios eventos con su sesión — necesaria para el login del
+organizador (ver más abajo).
+
 Alternativamente, si usás la Supabase CLI localmente:
 
 ```bash
 supabase db push
 ```
+
+> **Nota sobre confirmación de email**: por default, Supabase Auth exige que
+> el usuario confirme su email antes de poder iniciar sesión. Para pruebas
+> rápidas o un uso simple sin verificación de correo, podés desactivarlo en
+> **Authentication → Providers → Email → Confirm email** (OFF). Si lo dejás
+> activado, el organizador va a necesitar confirmar su cuenta desde el email
+> que le llega antes de poder loguearse.
 
 ### 3. Configurar variables de entorno
 
@@ -49,15 +62,29 @@ Abrí [http://localhost:3000](http://localhost:3000).
 
 ### Flujo de la app
 
-1. **Landing (`/`)**: el organizador crea un evento y llega a su panel admin
-   (`/admin/{admin_token}`) — guardá ese link, es la única forma de administrar
-   el evento.
-2. **Inscripción (`/join/{eventId}`)**: cada participante se registra y recibe
-   su link personal (`/reveal/{access_token}`).
-3. **Sorteo**: desde el panel admin, el organizador cierra inscripciones y
+1. **Cuenta del organizador**: el organizador crea una cuenta en `/signup`
+   (email + contraseña, vía Supabase Auth) o inicia sesión en `/login` si ya
+   tiene una.
+2. **Landing (`/`)**: crea un evento, que queda asociado a su cuenta
+   (`owner_id`), y llega a su panel admin (`/admin/{admin_token}`).
+3. **Inscripción (`/join/{eventId}`)**: cada participante se registra y recibe
+   su link personal (`/reveal/{access_token}`). Los participantes **no**
+   tienen cuenta ni login, solo su link.
+4. **Sorteo**: desde el panel admin, el organizador cierra inscripciones y
    sortea (con exclusiones opcionales configuradas por participante).
-4. **Revelar (`/reveal/{access_token}`)**: cada participante ve a quién le
+5. **Revelar (`/reveal/{access_token}`)**: cada participante ve a quién le
    toca regalar, y puede mandar/recibir pistas 100% anónimas.
+
+### Acceso del organizador: link directo o cuenta
+
+El panel de un evento sigue siendo accesible directamente por
+`/admin/{admin_token}` (el link que se muestra al crear el evento) — no hace
+falta estar logueado para usarlo, es la vía rápida de siempre.
+
+La cuenta (`/login` → `/admin`) es la vía de **recuperación**: si el
+organizador pierde ese link, puede loguearse y ver la lista de todos los
+eventos que creó, cada uno con su link al panel correspondiente
+(`/admin/{admin_token}`).
 
 ## Learn More
 

@@ -1,6 +1,8 @@
-import { Dices, Lock, Ban, MessageCircleHeart, Gift } from "lucide-react";
+import Link from "next/link";
+import { Dices, Lock, Ban, MessageCircleHeart, Gift, LogIn } from "lucide-react";
 import { CreateEventForm } from "@/components/CreateEventForm";
 import { JoinByLinkForm } from "@/components/JoinByLinkForm";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const FEATURES = [
   {
@@ -47,7 +49,12 @@ const STEPS = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <div className="flex flex-col">
       <header className="w-full px-6 py-5 flex items-center justify-between max-w-5xl mx-auto">
@@ -55,6 +62,19 @@ export default function Home() {
           <Gift className="size-5" aria-hidden="true" />
           Amigo Secreto
         </span>
+        {user ? (
+          <Link href="/admin" className="nb-btn nb-btn-secondary px-4 py-2 text-sm">
+            Mis eventos
+          </Link>
+        ) : (
+          <Link
+            href="/login"
+            className="nb-btn nb-btn-secondary px-4 py-2 text-sm flex items-center gap-2"
+          >
+            <LogIn className="size-4" aria-hidden="true" />
+            Iniciar sesión
+          </Link>
+        )}
       </header>
 
       <main className="flex flex-col gap-20 px-6 pb-20">
@@ -73,7 +93,10 @@ export default function Home() {
 
         {/* CTAs */}
         <section className="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 w-full">
-          <CreateEventForm />
+          <CreateEventForm
+            defaultAdminName={String(user?.user_metadata?.name ?? "")}
+            organizerEmail={user?.email}
+          />
           <JoinByLinkForm />
         </section>
 

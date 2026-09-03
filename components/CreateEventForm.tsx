@@ -6,7 +6,17 @@ import { createEventAction, type FormState } from "@/lib/actions/events";
 
 const initialState: FormState = {};
 
-export function CreateEventForm() {
+interface CreateEventFormProps {
+  /** Nombre del organizador logueado, para prellenar el campo. */
+  defaultAdminName?: string;
+  /** Email del organizador logueado, mostrado solo a modo informativo. */
+  organizerEmail?: string;
+}
+
+export function CreateEventForm({
+  defaultAdminName,
+  organizerEmail,
+}: CreateEventFormProps = {}) {
   const [state, formAction, pending] = useActionState(
     createEventAction,
     initialState
@@ -35,23 +45,21 @@ export function CreateEventForm() {
           id="adminName"
           name="adminName"
           required
+          defaultValue={defaultAdminName}
           placeholder="Tu nombre"
           className="border-2 border-border rounded-lg px-3 py-2 bg-white"
         />
       </div>
-      <div className="flex flex-col gap-1">
-        <label htmlFor="adminEmail" className="text-sm font-bold">
-          Tu email
-        </label>
-        <input
-          id="adminEmail"
-          name="adminEmail"
-          type="email"
-          required
-          placeholder="tu@ejemplo.com"
-          className="border-2 border-border rounded-lg px-3 py-2 bg-white"
-        />
-      </div>
+      {organizerEmail ? (
+        <p className="text-sm text-muted">
+          Vas a crear este evento como <span className="font-bold">{organizerEmail}</span>.
+        </p>
+      ) : (
+        <p className="text-sm text-muted">
+          Necesitás una cuenta para crear un evento — te vamos a pedir que te
+          registres o inicies sesión al confirmar.
+        </p>
+      )}
       {state.error && <p className="text-accent font-bold text-sm">{state.error}</p>}
       <button
         type="submit"

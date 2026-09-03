@@ -2,20 +2,36 @@
 
 import { redirect } from "next/navigation";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isValidUuid } from "@/lib/validate";
 
 export interface FormState {
   error?: string;
 }
 
-/** Crea un nuevo evento y redirige al panel de administración. */
+/**
+ * Crea un nuevo evento y redirige al panel de administración.
+ * Requiere sesión: sin usuario logueado, redirige a /signup para que el
+ * evento quede siempre con `owner_id` seteado.
+ */
 export async function createEventAction(
   _prevState: FormState,
   formData: FormData
 ): Promise<FormState> {
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/signup");
+  }
+
   const name = String(formData.get("name") ?? "").trim();
-  const adminName = String(formData.get("adminName") ?? "").trim();
-  const adminEmail = String(formData.get("adminEmail") ?? "").trim();
+  const adminName =
+    String(formData.get("adminName") ?? "").trim() ||
+    String(user.user_metadata?.name ?? "").trim();
+  const adminEmail = String(user.email ?? "").trim();
 
   if (!name || !adminName || !adminEmail) {
     return { error: "Completa todos los campos para crear tu evento." };
@@ -23,7 +39,12 @@ export async function createEventAction(
 
   const { data, error } = await supabaseAdmin
     .from("events")
-    .insert({ name, admin_name: adminName, admin_email: adminEmail })
+    .insert({
+      name,
+      admin_name: adminName,
+      admin_email: adminEmail,
+      owner_id: user.id,
+    })
     .select("admin_token")
     .single();
 
