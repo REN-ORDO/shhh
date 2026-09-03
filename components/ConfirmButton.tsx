@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 
 interface ConfirmButtonProps {
   children: ReactNode;
@@ -30,13 +30,33 @@ export function ConfirmButton({
   const dialogRef = useRef<HTMLDialogElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
+  // Bloquea el scroll del fondo mientras el modal está abierto y lo
+  // restaura al cerrarse, sin importar cómo se cierre (botón, Escape, etc.).
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    const unlockScroll = () => {
+      document.body.style.overflow = "";
+    };
+
+    dialog.addEventListener("close", unlockScroll);
+    return () => {
+      dialog.removeEventListener("close", unlockScroll);
+      unlockScroll();
+    };
+  }, []);
+
   return (
     <>
       <button
         ref={buttonRef}
         type="button"
         disabled={pending}
-        onClick={() => dialogRef.current?.showModal()}
+        onClick={() => {
+          document.body.style.overflow = "hidden";
+          dialogRef.current?.showModal();
+        }}
         className={className}
       >
         {pending ? (pendingLabel ?? "...") : children}
@@ -52,7 +72,10 @@ export function ConfirmButton({
           <button
             type="button"
             className="nb-btn nb-btn-secondary px-4 py-2 text-sm"
-            onClick={() => dialogRef.current?.close()}
+            onClick={() => {
+              dialogRef.current?.close();
+              document.body.style.overflow = "";
+            }}
           >
             Cancelar
           </button>
@@ -61,6 +84,7 @@ export function ConfirmButton({
             className="nb-btn nb-btn-primary px-4 py-2 text-sm"
             onClick={() => {
               dialogRef.current?.close();
+              document.body.style.overflow = "";
               buttonRef.current?.closest("form")?.requestSubmit();
             }}
           >
