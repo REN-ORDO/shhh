@@ -92,6 +92,6 @@ export function computeDerangement({
   return {
     ok: false,
     reason:
-      "No se pudo generar un sorteo válido tras varios intentos. Revisá las exclusiones: probablemente sean demasiado restrictivas para la cantidad de participantes.",
+      "No se pudo generar un sorteo válido tras varios intentos. Revisa las exclusiones: probablemente sean demasiado restrictivas para la cantidad de participantes.",
   };
 }

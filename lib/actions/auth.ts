@@ -55,14 +55,14 @@ export async function signUpAction(
   });
 
   if (error) {
-    return { error: "No se pudo crear la cuenta. Probá con otro email." };
+    return { error: "No se pudo crear la cuenta. Prueba con otro email." };
   }
 
   // Si la confirmación de email está activada en el proyecto Supabase, no hay
   // sesión todavía y hay que avisarle al usuario que revise su correo.
   if (!data.session) {
     return {
-      info: "¡Cuenta creada! Revisá tu email para confirmar la cuenta antes de iniciar sesión.",
+      info: "¡Cuenta creada! Revisa tu email para confirmar la cuenta antes de iniciar sesión.",
     };
   }
 

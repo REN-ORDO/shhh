@@ -56,7 +56,7 @@ export function CreateEventForm({
         </p>
       ) : (
         <p className="text-sm text-muted">
-          Necesitás una cuenta para crear un evento — te vamos a pedir que te
+          Necesitas una cuenta para crear un evento — te vamos a pedir que te
           registres o inicies sesión al confirmar.
         </p>
       )}

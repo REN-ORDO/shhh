@@ -22,9 +22,9 @@ export default function LoginPage() {
         <LoginForm />
 
         <p className="text-sm text-muted">
-          ¿No tenés cuenta?{" "}
+          ¿No tienes cuenta?{" "}
           <Link href="/signup" className="font-bold text-accent underline">
-            Creá una acá
+            Crea una acá
           </Link>
         </p>
       </div>

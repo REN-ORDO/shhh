@@ -49,7 +49,7 @@ export async function createEventAction(
     .single();
 
   if (error || !data) {
-    return { error: "No se pudo crear el evento. Intentá de nuevo." };
+    return { error: "No se pudo crear el evento. Intenta de nuevo." };
   }
 
   redirect(`/admin/${data.admin_token}`);

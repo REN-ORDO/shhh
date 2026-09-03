@@ -34,7 +34,7 @@ export async function closeAndDrawAction(
 
   if (participantIds.length < 3) {
     return {
-      error: "Necesitás al menos 3 participantes inscriptos para poder sortear.",
+      error: "Necesitas al menos 3 participantes inscriptos para poder sortear.",
     };
   }
 

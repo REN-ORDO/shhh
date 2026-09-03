@@ -15,16 +15,16 @@ export default function SignupPage() {
           <span className="nb-pill self-center">Organizador/a</span>
           <h1 className="text-2xl font-extrabold">Crea tu cuenta</h1>
           <p className="text-muted text-sm">
-            Así podés recuperar el acceso a tus eventos aunque pierdas el link.
+            Así puedes recuperar el acceso a tus eventos aunque pierdas el link.
           </p>
         </div>
 
         <SignupForm />
 
         <p className="text-sm text-muted">
-          ¿Ya tenés cuenta?{" "}
+          ¿Ya tienes cuenta?{" "}
           <Link href="/login" className="font-bold text-accent underline">
-            Iniciá sesión
+            Inicia sesión
           </Link>
         </p>
       </div>
