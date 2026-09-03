@@ -1,10 +1,18 @@
 import Link from "next/link";
-import { Gift } from "lucide-react";
+import { ArrowLeft, Gift } from "lucide-react";
 import { LoginForm } from "@/components/LoginForm";
 
 export default function LoginPage() {
   return (
     <div className="flex flex-col min-h-screen items-center justify-center px-6 py-12 gap-8">
+      <Link
+        href="/"
+        className="self-start text-sm font-bold text-muted flex items-center gap-1 hover:text-foreground"
+      >
+        <ArrowLeft className="size-4" aria-hidden="true" />
+        Volver al inicio
+      </Link>
+
       <Link href="/" className="text-lg font-extrabold flex items-center gap-2">
         <Gift className="size-5" aria-hidden="true" />
         Amigo Secreto
