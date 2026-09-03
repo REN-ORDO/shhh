@@ -44,7 +44,7 @@ export function ConfirmButton({
 
       <dialog
         ref={dialogRef}
-        className="nb-card p-6 max-w-sm w-[90vw] backdrop:bg-black/40"
+        className="nb-card p-6 max-w-sm w-[90vw] m-0 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop:bg-black/40"
       >
         <h3 className="font-extrabold text-lg mb-2">{title}</h3>
         <p className="text-sm text-muted mb-5">{description}</p>
