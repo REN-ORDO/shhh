@@ -161,8 +161,19 @@ export default async function AdminPage({
           )}
         </div>
 
-        {/* Columna principal: participantes y sorteo */}
+        {/* Columna principal: sorteo y participantes */}
         <div className="flex flex-col gap-6">
+          {isOpen && list.length >= 3 && (
+            <div className="nb-card p-6 sm:p-8 flex flex-col gap-4">
+              <h2 className="font-extrabold text-lg">Sorteo</h2>
+              <p className="text-sm text-muted">
+                Una vez que cierres inscripciones y sortees, no vas a poder
+                agregar ni eliminar participantes.
+              </p>
+              <DrawButton adminToken={adminToken} />
+            </div>
+          )}
+
           <div className="nb-card p-6 sm:p-8 flex flex-col gap-4 flex-1">
             <h2 className="font-extrabold text-lg">
               Participantes ({list.length})
@@ -195,17 +206,6 @@ export default async function AdminPage({
               </>
             )}
           </div>
-
-          {isOpen && list.length >= 3 && (
-            <div className="nb-card p-6 sm:p-8 flex flex-col gap-4">
-              <h2 className="font-extrabold text-lg">Sorteo</h2>
-              <p className="text-sm text-muted">
-                Una vez que cierres inscripciones y sortees, no vas a poder
-                agregar ni eliminar participantes.
-              </p>
-              <DrawButton adminToken={adminToken} />
-            </div>
-          )}
 
           {isOpen && list.length < 3 && (
             <p className="text-sm text-muted text-center">
