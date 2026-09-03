@@ -1,0 +1,56 @@
+"use server";
+
+import { redirect } from "next/navigation";
+import { supabaseAdmin } from "@/lib/supabase/admin";
+import { isValidUuid } from "@/lib/validate";
+
+export interface FormState {
+  error?: string;
+}
+
+/** Crea un nuevo evento y redirige al panel de administración. */
+export async function createEventAction(
+  _prevState: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const name = String(formData.get("name") ?? "").trim();
+  const adminName = String(formData.get("adminName") ?? "").trim();
+  const adminEmail = String(formData.get("adminEmail") ?? "").trim();
+
+  if (!name || !adminName || !adminEmail) {
+    return { error: "Completá todos los campos para crear tu evento." };
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from("events")
+    .insert({ name, admin_name: adminName, admin_email: adminEmail })
+    .select("admin_token")
+    .single();
+
+  if (error || !data) {
+    return { error: "No se pudo crear el evento. Intentá de nuevo." };
+  }
+
+  redirect(`/admin/${data.admin_token}`);
+}
+
+/** Extrae un UUID de un link completo o de un id pegado tal cual. */
+function extractUuid(input: string): string | null {
+  const match = input.match(
+    /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i
+  );
+  return match ? match[0] : null;
+}
+
+/** Redirige a la página de inscripción dado un link o id de evento pegado. */
+export async function goToJoinAction(
+  _prevState: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const raw = String(formData.get("eventLink") ?? "").trim();
+  const eventId = extractUuid(raw);
+  if (!eventId || !isValidUuid(eventId)) {
+    return { error: "Pegá un link de invitación válido." };
+  }
+  redirect(`/join/${eventId}`);
+}

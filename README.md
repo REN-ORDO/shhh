@@ -1,24 +1,63 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+## Amigo Secreto Virtual
 
-First, run the development server:
+App para organizar un intercambio de regalos ("Amigo Secreto") online: sorteo
+automático (derangement con exclusiones opcionales), links individuales por
+participante, y pistas anónimas entre amigo secreto y su destinatario.
+
+### 1. Crear el proyecto en Supabase
+
+Creá un proyecto en [supabase.com](https://supabase.com) (o usá uno existente).
+
+### 2. Correr la migración
+
+Copiá el contenido de `supabase/migrations/0001_init.sql` y ejecutalo en el
+**SQL Editor** de tu proyecto Supabase (Database → SQL Editor → New query →
+pegar → Run). Esto crea las tablas `events`, `participants`, `assignments`,
+`exclusions`, `clues`, con RLS habilitado (deny-all por defecto; el acceso
+real de la app pasa por la service role key en Server Actions).
+
+Alternativamente, si usás la Supabase CLI localmente:
+
+```bash
+supabase db push
+```
+
+### 3. Configurar variables de entorno
+
+Copiá `.env.local.example` a `.env.local` y completá los valores desde
+**Project Settings → API** de tu proyecto Supabase:
+
+```bash
+cp .env.local.example .env.local
+```
+
+- `NEXT_PUBLIC_SUPABASE_URL`: URL del proyecto.
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: la clave `anon`/`public`.
+- `SUPABASE_SERVICE_ROLE_KEY`: la clave `service_role` (¡secreta! nunca la
+  expongas en el cliente — este proyecto solo la usa server-side, en
+  `lib/supabase/admin.ts`).
+
+### 4. Correr en desarrollo
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrí [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Flujo de la app
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Landing (`/`)**: el organizador crea un evento y llega a su panel admin
+   (`/admin/{admin_token}`) — guardá ese link, es la única forma de administrar
+   el evento.
+2. **Inscripción (`/join/{eventId}`)**: cada participante se registra y recibe
+   su link personal (`/reveal/{access_token}`).
+3. **Sorteo**: desde el panel admin, el organizador cierra inscripciones y
+   sortea (con exclusiones opcionales configuradas por participante).
+4. **Revelar (`/reveal/{access_token}`)**: cada participante ve a quién le
+   toca regalar, y puede mandar/recibir pistas 100% anónimas.
 
 ## Learn More
 
