@@ -8,6 +8,7 @@ import { ParticipantRow } from "@/components/ParticipantRow";
 import { ParticipantsPagination } from "@/components/ParticipantsPagination";
 import { DrawButton } from "@/components/DrawButton";
 import { ShareInviteButton } from "@/components/ShareInviteButton";
+import { CopyField } from "@/components/CopyField";
 import type { ExclusionRow, ParticipantRow as ParticipantRowType } from "@/lib/types";
 
 const PARTICIPANTS_PER_PAGE = 8;
@@ -130,18 +131,17 @@ export default async function AdminPage({
               <p className="text-sm text-muted">
                 Comparte este link con los participantes para que se inscriban:
               </p>
-              <code className="border-2 border-border rounded-lg px-3 py-2 bg-white text-sm break-all">
-                {joinPath}
-              </code>
+              <CopyField value={joinLink} />
               {event.join_code && (
                 <>
                   <p className="text-sm text-muted">
                     O comparte este código para que lo escriban a mano en la
                     página principal:
                   </p>
-                  <code className="border-2 border-border rounded-lg px-3 py-2 bg-white text-sm font-extrabold tracking-widest text-center">
-                    {event.join_code}
-                  </code>
+                  <CopyField
+                    value={event.join_code}
+                    codeClassName="font-extrabold tracking-widest text-center"
+                  />
                 </>
               )}
               <ShareInviteButton
