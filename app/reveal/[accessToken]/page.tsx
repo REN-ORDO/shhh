@@ -1,8 +1,13 @@
 import { notFound } from "next/navigation";
 import { Hand, Gift } from "lucide-react";
+import Image from "next/image";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { isValidUuid } from "@/lib/validate";
 import { SendClueForm } from "@/components/SendClueForm";
+import type { ClueAttachmentRow } from "@/lib/types";
+
+const ATTACH_BUCKET = "clue-images";
+const SIGNED_URL_TTL = 3600; // segundos
 
 export default async function RevealPage({
   params,
@@ -60,6 +65,13 @@ export default async function RevealPage({
     .eq("receiver_id", participant.id)
     .order("created_at", { ascending: false });
 
+  // Adjuntos: una sola query batcheada para todas las pistas (evita N+1) y
+  // signed URLs de corta duración generadas con la service role key para
+  // servir los objetos del bucket privado.
+  const attachmentsByClue = await fetchAttachmentsByClue(
+    inboxClues?.map((c) => c.id) ?? []
+  );
+
   return (
     <div className="flex flex-col items-center gap-8 px-6 py-16 max-w-xl mx-auto">
       <span className="nb-pill">{event.name}</span>
@@ -99,13 +111,27 @@ export default async function RevealPage({
                   Todavía no recibiste ninguna pista.
                 </p>
               ) : (
-                <ul className="flex flex-col gap-2">
+                <ul className="flex flex-col gap-4">
                   {inboxClues.map((clue) => (
                     <li
                       key={clue.id}
-                      className="border-2 border-border rounded-lg px-3 py-2 bg-accent-light text-sm"
+                      className="border-2 border-border rounded-lg px-3 py-2 bg-accent-light text-sm flex flex-col gap-2"
                     >
-                      {clue.message}
+                      <p>{clue.message}</p>
+                      {attachmentsByClue.get(clue.id)?.map((att) => (
+                        <div
+                          key={att.id}
+                          className="relative w-full aspect-video overflow-hidden rounded-md"
+                        >
+                          <Image
+                            src={att.signedUrl}
+                            alt="Imagen adjunta a la pista"
+                            fill
+                            sizes="(min-width: 640px) 576px, 100vw"
+                            className="object-cover"
+                          />
+                        </div>
+                      ))}
                     </li>
                   ))}
                 </ul>
@@ -116,4 +142,40 @@ export default async function RevealPage({
       )}
     </div>
   );
+}
+
+/**
+ * Trae todos los adjuntos de las pistas en una sola query batcheada
+ * (`clue_id IN (...)`) y les genera signed URLs de corta duración con la
+ * service role key. Devuelve un Map `clue_id -> [{ id, signedUrl }]`.
+ */
+async function fetchAttachmentsByClue(
+  clueIds: string[]
+): Promise<Map<string, { id: string; signedUrl: string }[]>> {
+  const result = new Map<string, { id: string; signedUrl: string }[]>();
+  if (clueIds.length === 0) return result;
+
+  const { data: attachments } = await supabaseAdmin
+    .from("clue_attachments")
+    .select("id, clue_id, bucket, path")
+    .in("clue_id", clueIds);
+
+  if (!attachments) return result;
+
+  for (const row of attachments as Pick<
+    ClueAttachmentRow,
+    "id" | "clue_id" | "bucket" | "path"
+  >[]) {
+    const { data: signed, error } = await supabaseAdmin.storage
+      .from(ATTACH_BUCKET)
+      .createSignedUrl(row.path, SIGNED_URL_TTL);
+
+    if (error || !signed) continue;
+
+    const list = result.get(row.clue_id) ?? [];
+    list.push({ id: row.id, signedUrl: signed.signedUrl });
+    result.set(row.clue_id, list);
+  }
+
+  return result;
 }

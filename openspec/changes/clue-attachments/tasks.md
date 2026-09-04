@@ -31,15 +31,15 @@ Chain strategy: size-exception
 
 ## Phase 2: Core Implementation (Server Action)
 
-- [ ] 2.1 Extend `sendClueAction` in `lib/actions/clues.ts`: extract `File[]` from FormData key `attachments`; server-validate each: MIME in allowlist, size ≤ 5MB, count ≤ 5; reject with FormState error on any failure before inserting clue
-- [ ] 2.2 After clue insert, per file: generate attId via `crypto.randomUUID()`, upload to `storage.from('clue-images').upload('{eventId}/{clueId}/{attId}/original.{ext}', file)`, insert `clue_attachments` row; on any failure after clue insert, best-effort `storage.remove` all already-uploaded paths for that clue, return error FormState
-- [ ] 2.3 Ensure no sender metadata is written: no sender id in path, no owner metadata, no user column — verify by code review of `sendClueAction`
+- [x] 2.1 Extend `sendClueAction` in `lib/actions/clues.ts`: extract `File[]` from FormData key `attachments`; server-validate each: MIME in allowlist, size ≤ 5MB, count ≤ 5; reject with FormState error on any failure before inserting clue
+- [x] 2.2 After clue insert, per file: generate attId via `crypto.randomUUID()`, upload to `storage.from('clue-images').upload('{eventId}/{clueId}/{attId}/original.{ext}', file)`, insert `clue_attachments` row; on any failure after clue insert, best-effort `storage.remove` all already-uploaded paths for that clue, return error FormState
+- [x] 2.3 Ensure no sender metadata is written: no sender id in path, no owner metadata, no user column — verify by code review of `sendClueAction`
 
 ## Phase 3: UI Integration
 
-- [ ] 3.1 Modify `SendClueForm.tsx`: add `<input type="file" name="attachments" accept="image/jpeg,image/png,image/gif,image/webp" multiple>`, client-side preview thumbnails, count guard (≤5) and per-file size guard (≤5MB) before submit, append files to FormData
-- [ ] 3.2 Modify `app/reveal/[accessToken]/page.tsx`: after existing `inboxClues` query, collect all clue IDs, batched query `clue_attachments WHERE clue_id IN (...)`, for each attachment call `supabaseAdmin.storage.from('clue-images').createSignedUrl(path, 3600)`, render images with `<Image>` from `next/image` using signed URL
-- [ ] 3.3 Add `images.remotePatterns` to `next.config.ts`: derive Supabase host from `NEXT_PUBLIC_SUPABASE_URL` (parse hostname), add pattern `{ protocol: 'https', hostname: '*.supabase.co', pathname: '/storage/v1/object/public/**' }` and a second pattern for the private bucket's signed URL path
+- [x] 3.1 Modify `SendClueForm.tsx`: add `<input type="file" name="attachments" accept="image/jpeg,image/png,image/gif,image/webp" multiple>`, client-side preview thumbnails, count guard (≤5) and per-file size guard (≤5MB) before submit, append files to FormData
+- [x] 3.2 Modify `app/reveal/[accessToken]/page.tsx`: after existing `inboxClues` query, collect all clue IDs, batched query `clue_attachments WHERE clue_id IN (...)`, for each attachment call `supabaseAdmin.storage.from('clue-images').createSignedUrl(path, 3600)`, render images with `<Image>` from `next/image` using signed URL
+- [x] 3.3 Add `images.remotePatterns` to `next.config.ts`: derive Supabase host from `NEXT_PUBLIC_SUPABASE_URL` (parse hostname), add pattern `{ protocol: 'https', hostname: '*.supabase.co', pathname: '/storage/v1/object/public/**' }` and a second pattern for the private bucket's signed URL path
 
 ## Phase 4: Verification
 
