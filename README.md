@@ -1,102 +1,159 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🤫 Shhh — Amigo Secreto Virtual
 
-## Amigo Secreto Virtual
+**Organiza tu intercambio de regalos online — sin planillas, sin bolillero, sin drama.**
 
-App para organizar un intercambio de regalos ("Amigo Secreto") online: sorteo
-automático (derangement con exclusiones opcionales), links individuales por
-participante, y pistas anónimas entre amigo secreto y su destinatario.
+Creas un evento, invitas a tus amigos, familia o compañeros, y la app se encarga del sorteo y las pistas anónimas. Simple, rápido y gratis.
 
-### 1. Crear el proyecto en Supabase
+---
 
-Creá un proyecto en [supabase.com](https://supabase.com) (o usá uno existente).
+## ✨ Qué incluye
 
-### 2. Correr la migración
+| Feature | Descripción |
+| --- | --- |
+| **🎲 Sorteo automático** | Un click y listo: cada participante recibe a quién le toca regalar, sin repetidos. Soporta exclusiones (parejas, familiares, etc.) |
+| **🔗 Link secreto por participante** | Nadie más puede ver tu resultado. Cada persona tiene su propio link personal. |
+| **💬 Pistas 100% anónimas** | Manda pistas a quien te tocó sin revelar quién eres. Puedes enviar **texto, fotos, imágenes, tarjetas, adivinanzas** — lo que se te ocurra. |
+| **🖼️ Adjuntos multimedia** | Las pistas no son solo texto: sube imágenes (JPG, PNG, GIF, WebP), crea tarjetas, manda memes. Creatividad sin límites. |
+| **👤 Cuenta del organizador** | Crea tu cuenta para tener control total de tus eventos. Si pierdes el link, te logueas y lo recuperas. |
+| **🛡️ Privacidad por diseño** | La app nunca almacena quién mandó qué pista. Anonimato real, no una promesa. |
 
-Copiá el contenido de `supabase/migrations/0001_init.sql` y ejecutalo en el
-**SQL Editor** de tu proyecto Supabase (Database → SQL Editor → New query →
-pegar → Run). Esto crea las tablas `events`, `participants`, `assignments`,
-`exclusions`, `clues`, con RLS habilitado (deny-all por defecto; el acceso
-real de la app pasa por la service role key en Server Actions).
+---
 
-Después, corré también `supabase/migrations/0002_auth.sql` (mismo proceso:
-pegar en el SQL Editor y ejecutar). Esta migración agrega la columna
-`owner_id` a `events` y una policy de RLS para que cada organizador pueda
-leer sus propios eventos con su sesión — necesaria para el login del
-organizador (ver más abajo).
+## 🚀 Cómo funciona
 
-Alternativamente, si usás la Supabase CLI localmente:
-
-```bash
-supabase db push
+```
+  1. CREA TU EVENTO          2. INVITA GENTE           3. SORTEEN Y DIVIERTANSE
+  ─────────────────          ──────────────────        ────────────────────────
+  Completa el nombre     →   Comparte el link de    →  Cada persona ve a quién
+  y tus datos como           inscripción. Tus            le toca regalar y
+  organizador/a.             amigos se anotan con       empieza a mandar pistas
+                             su nombre y email.         anónimas (¡con fotos!).
 ```
 
-> **Nota sobre confirmación de email**: por default, Supabase Auth exige que
-> el usuario confirme su email antes de poder iniciar sesión. Para pruebas
-> rápidas o un uso simple sin verificación de correo, podés desactivarlo en
-> **Authentication → Providers → Email → Confirm email** (OFF). Si lo dejás
-> activado, el organizador va a necesitar confirmar su cuenta desde el email
-> que le llega antes de poder loguearse.
+1. **Crea tu evento** desde la landing — te da un link de admin y un link de inscripción.
+2. **Comparte el link de inscripción** con los participantes.
+3. **Cuando estén todos**, cierra inscripciones y haz el sorteo desde tu panel.
+4. **Cada participante** recibe su link secreto y puede mandar/recibir pistas.
 
-### 3. Configurar variables de entorno
+---
 
-Copiá `.env.local.example` a `.env.local` y completá los valores desde
-**Project Settings → API** de tu proyecto Supabase:
+## 🛠️ Para levantar el proyecto
+
+### Requisitos
+
+- [Node.js](https://nodejs.org/) 18+
+- Una cuenta en [Supabase](https://supabase.com) (gratis)
+
+### Paso 1 — Crear el proyecto en Supabase
+
+Crea un proyecto nuevo en [supabase.com](https://supabase.com) (o usa uno existente).
+
+### Paso 2 — Correr las migraciones
+
+Ve a **Database → SQL Editor** en tu panel de Supabase y ejecuta estos archivos en orden:
+
+1. `supabase/migrations/0001_init.sql` — crea las tablas principales
+2. `supabase/migrations/0002_auth.sql` — agrega login del organizador
+3. `supabase/migrations/0003_join_code.sql` — código corto de evento
+4. `supabase/migrations/0004_clue_attachments.sql` — adjuntos de imagen en pistas
+
+Copia el contenido de cada archivo, pégalo en un query nuevo y dale **Run**.
+
+> **Tip**: Si usas la Supabase CLI localmente, puedes hacer `supabase db push` para correr todas las migraciones de una.
+
+### Paso 3 — Variables de entorno
+
+Copia el archivo de ejemplo y complétalo con los datos de tu proyecto:
 
 ```bash
 cp .env.local.example .env.local
 ```
 
-- `NEXT_PUBLIC_SUPABASE_URL`: URL del proyecto.
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: la clave `anon`/`public`.
-- `SUPABASE_SERVICE_ROLE_KEY`: la clave `service_role` (¡secreta! nunca la
-  expongas en el cliente — este proyecto solo la usa server-side, en
-  `lib/supabase/admin.ts`).
+Necesitas tres valores que encuentras en **Project Settings → API** de Supabase:
 
-### 4. Correr en desarrollo
+| Variable | Qué es |
+| --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | URL de tu proyecto |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | La clave pública |
+| `SUPABASE_SERVICE_ROLE_KEY` | La clave secreta (solo server-side) |
+
+### Paso 4 — ¡Listo!
 
 ```bash
 npm run dev
 ```
 
-Abrí [http://localhost:3000](http://localhost:3000).
+Abre [http://localhost:3000](http://localhost:3000) y crea tu primer evento 🎉
 
-### Flujo de la app
+---
 
-1. **Cuenta del organizador**: el organizador crea una cuenta en `/signup`
-   (email + contraseña, vía Supabase Auth) o inicia sesión en `/login` si ya
-   tiene una.
-2. **Landing (`/`)**: crea un evento, que queda asociado a su cuenta
-   (`owner_id`), y llega a su panel admin (`/admin/{admin_token}`).
-3. **Inscripción (`/join/{eventId}`)**: cada participante se registra y recibe
-   su link personal (`/reveal/{access_token}`). Los participantes **no**
-   tienen cuenta ni login, solo su link.
-4. **Sorteo**: desde el panel admin, el organizador cierra inscripciones y
-   sortea (con exclusiones opcionales configuradas por participante).
-5. **Revelar (`/reveal/{access_token}`)**: cada participante ve a quién le
-   toca regalar, y puede mandar/recibir pistas 100% anónimas.
+## 📱 Flujo completo
 
-### Acceso del organizador: link directo o cuenta
+### Para el organizador
 
-El panel de un evento sigue siendo accesible directamente por
-`/admin/{admin_token}` (el link que se muestra al crear el evento) — no hace
-falta estar logueado para usarlo, es la vía rápida de siempre.
+| Paso | Qué hace | Dónde |
+| --- | --- | --- |
+| Crear cuenta | Email + contraseña | `/signup` |
+| Crear evento | Nombre del evento | Landing `/` |
+| Gestionar | Ver participantes, cerrar inscripciones, sortear | `/admin/{token}` |
+| Recuperar acceso | Si perdió el link, se loguea y ve sus eventos | `/login` → `/admin` |
 
-La cuenta (`/login` → `/admin`) es la vía de **recuperación**: si el
-organizador pierde ese link, puede loguearse y ver la lista de todos los
-eventos que creó, cada uno con su link al panel correspondiente
-(`/admin/{admin_token}`).
+### Para los participantes
 
-## Learn More
+| Paso | Qué hace | Dónde |
+| --- | --- | --- |
+| Inscribirse | Nombre + email | `/join/{eventId}` |
+| Ver resultado | A quién le toca regalar | `/reveal/{token}` |
+| Mandar pistas | Texto + imágenes, 100% anónimo | `/reveal/{token}` |
 
-To learn more about Next.js, take a look at the following resources:
+> **Los participantes no necesitan cuenta ni contraseña.** Solo tienen su link secreto.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🔒 Sobre la privacidad
 
-## Deploy on Vercel
+La privacidad no es un feature — es la base de todo:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Las pistas no tienen remitente.** La base de datos nunca almacena quién mandó qué.
+- **Las rutas de archivos tampoco.** Las imágenes se suben con UUIDs, sin ningún dato identificatorio del remitente.
+- **RLS deny-all.** Todas las tablas tienen Row Level Security activado con política de denegación total. El acceso real pasa por Server Actions con service role.
+- **Links únicos.** Cada participante tiene un token único e intransferible.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🏗️ Stack
+
+- **Frontend**: [Next.js](https://nextjs.org) 16 + React 19 + Tailwind CSS 4
+- **Backend**: Next.js Server Actions
+- **Base de datos**: [Supabase](https://supabase.com) (PostgreSQL)
+- **Auth**: Supabase Auth
+- **Storage**: Supabase Storage (bucket privado para imágenes de pistas)
+- **Estilo**: Neobrutalismo suave (bordes gruesos, sombras offset, colores cálidos)
+
+---
+
+## 📂 Estructura del proyecto
+
+```
+shhh/
+├── app/                    # Páginas (Next.js App Router)
+│   ├── admin/              # Panel del organizador
+│   ├── join/               # Inscripción de participantes
+│   ├── login/              # Login del organizador
+│   ├── reveal/             # Página secreta de cada participante
+│   └── signup/             # Registro del organizador
+├── components/             # Componentes React
+├── lib/                    # Lógica de negocio
+│   ├── actions/            # Server Actions (enviar pistas, sortear, etc.)
+│   └── supabase/           # Clientes de Supabase
+├── public/                 # Assets estáticos
+└── supabase/migrations/    # Migraciones SQL
+```
+
+---
+
+## 🚀 Deploy
+
+La forma más fácil: [Vercel](https://vercel.com). Conecta tu repo y configura las variables de entorno en el dashboard. Listo.
+
+Para más detalles, revisa la [documentación de deploy de Next.js](https://nextjs.org/docs/app/building-your-application/deploying).
