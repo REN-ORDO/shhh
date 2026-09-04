@@ -18,7 +18,7 @@ const siteUrl =
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Amigo Secreto Virtual",
+  title: "Shhh — Amigo Secreto Virtual",
   description: "Organiza tu Amigo Secreto online: sorteo automático, pistas anónimas y todo en un link.",
 };
 

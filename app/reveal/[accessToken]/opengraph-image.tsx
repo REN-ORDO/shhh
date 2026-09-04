@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { isValidUuid } from "@/lib/validate";
 
-export const alt = "Tu link de Amigo Secreto Virtual";
+export const alt = "Tu link de Shhh — Amigo Secreto Virtual";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -22,7 +22,7 @@ export default async function Image({
   const { accessToken } = await params;
 
   let participantName: string | undefined;
-  let eventName = "Amigo Secreto Virtual";
+  let eventName = "Shhh — Amigo Secreto Virtual";
 
   if (isValidUuid(accessToken)) {
     const { data: participant } = await supabaseAdmin

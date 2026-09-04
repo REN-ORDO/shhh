@@ -20,7 +20,7 @@ export async function generateMetadata({
 
   if (!event) return {};
 
-  const title = `${event.name} · Amigo Secreto Virtual`;
+  const title = `${event.name} · Shhh — Amigo Secreto Virtual`;
   const description = `${event.admin_name} te invitó a jugar Amigo Secreto. Sumate al sorteo en un click.`;
 
   return {
@@ -50,7 +50,7 @@ export default async function JoinPage({
 
   return (
     <div className="flex flex-col items-center gap-6 px-6 py-16">
-      <span className="nb-pill">Amigo Secreto Virtual</span>
+      <span className="nb-pill">Shhh — Amigo Secreto Virtual</span>
       <h1 className="text-3xl font-extrabold text-center">{event.name}</h1>
       <p className="text-muted text-center max-w-md">
         {event.admin_name} te invitó a jugar Amigo Secreto. Completa tus datos

@@ -35,7 +35,7 @@ export async function generateMetadata({
     .eq("id", participant.event_id)
     .single();
 
-  const eventName = event?.name ?? "Amigo Secreto Virtual";
+  const eventName = event?.name ?? "Shhh — Amigo Secreto Virtual";
   const title = `Hola, ${participant.name} · ${eventName}`;
   const description = "Tocá para ver tus novedades del Amigo Secreto.";
 

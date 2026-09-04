@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
-export const alt = "Invitación a Amigo Secreto Virtual";
+export const alt = "Invitación a Shhh — Amigo Secreto Virtual";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -22,7 +22,7 @@ export default async function Image({
     .eq("id", eventId)
     .single();
 
-  const eventName = event?.name ?? "Amigo Secreto Virtual";
+  const eventName = event?.name ?? "Shhh — Amigo Secreto Virtual";
   const adminName = event?.admin_name;
 
   return new ImageResponse(
@@ -70,7 +70,7 @@ export default async function Image({
             marginBottom: 28,
           }}
         >
-          Amigo Secreto Virtual
+          Shhh — Amigo Secreto Virtual
         </div>
         <div
           style={{
