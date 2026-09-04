@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { Hand, Gift } from "lucide-react";
 import Image from "next/image";
 import { supabaseAdmin } from "@/lib/supabase/admin";
@@ -8,6 +9,43 @@ import type { ClueAttachmentRow } from "@/lib/types";
 
 const ATTACH_BUCKET = "clue-images";
 const SIGNED_URL_TTL = 3600; // segundos
+
+// Nunca incluir acá el `receiver` (a quién le regala esta persona): el
+// preview de WhatsApp se genera server-side apenas alguien pega el link,
+// antes de que el dueño lo abra, así que no puede spoilear el sorteo.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ accessToken: string }>;
+}): Promise<Metadata> {
+  const { accessToken } = await params;
+  if (!isValidUuid(accessToken)) return {};
+
+  const { data: participant } = await supabaseAdmin
+    .from("participants")
+    .select("name, event_id")
+    .eq("access_token", accessToken)
+    .single();
+
+  if (!participant) return {};
+
+  const { data: event } = await supabaseAdmin
+    .from("events")
+    .select("name")
+    .eq("id", participant.event_id)
+    .single();
+
+  const eventName = event?.name ?? "Amigo Secreto Virtual";
+  const title = `Hola, ${participant.name} · ${eventName}`;
+  const description = "Tocá para ver tus novedades del Amigo Secreto.";
+
+  return {
+    title,
+    description,
+    openGraph: { title, description },
+    twitter: { card: "summary_large_image", title, description },
+  };
+}
 
 export default async function RevealPage({
   params,

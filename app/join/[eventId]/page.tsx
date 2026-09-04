@@ -1,7 +1,35 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { isValidUuid } from "@/lib/validate";
 import { JoinForm } from "@/components/JoinForm";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ eventId: string }>;
+}): Promise<Metadata> {
+  const { eventId } = await params;
+  if (!isValidUuid(eventId)) return {};
+
+  const { data: event } = await supabaseAdmin
+    .from("events")
+    .select("name, admin_name")
+    .eq("id", eventId)
+    .single();
+
+  if (!event) return {};
+
+  const title = `${event.name} · Amigo Secreto Virtual`;
+  const description = `${event.admin_name} te invitó a jugar Amigo Secreto. Sumate al sorteo en un click.`;
+
+  return {
+    title,
+    description,
+    openGraph: { title, description },
+    twitter: { card: "summary_large_image", title, description },
+  };
+}
 
 export default async function JoinPage({
   params,
