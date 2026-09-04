@@ -48,3 +48,19 @@ export interface ClueRow {
   message: string;
   created_at: string;
 }
+
+/**
+ * Adjunto de imagen de una pista. Anónimo por diseño: no hay remitente ni
+ * ningún campo que permita rastrear al emisor. `bucket` siempre es
+ * `clue-images` y `path` sigue el patrón
+ * `{eventId}/{clueId}/{attachmentId}/original.<ext>` (solo UUIDs).
+ */
+export interface ClueAttachmentRow {
+  id: string;
+  clue_id: string;
+  bucket: string;
+  path: string;
+  mime_type: string;
+  size_bytes: number;
+  created_at: string;
+}
