@@ -2,7 +2,13 @@ import Link from "next/link";
 import { ArrowLeft, Gift } from "lucide-react";
 import { SignupForm } from "@/components/SignupForm";
 
-export default function SignupPage() {
+interface SignupPageProps {
+  searchParams: Promise<{ eventName?: string }>;
+}
+
+export default async function SignupPage({ searchParams }: SignupPageProps) {
+  const { eventName } = await searchParams;
+
   return (
     <div className="flex flex-col min-h-screen items-center justify-center px-6 py-12 gap-4">
       <Link href="/" className="text-lg font-extrabold flex items-center gap-2">
@@ -23,11 +29,18 @@ export default function SignupPage() {
           <span className="nb-pill self-center">Organizador/a</span>
           <h1 className="text-2xl font-extrabold">Crea tu cuenta</h1>
           <p className="text-muted text-sm">
-            Así puedes recuperar el acceso a tus eventos aunque pierdas el link.
+            {eventName ? (
+              <>
+                Ya casi — creamos tu cuenta y de una tu evento{" "}
+                <span className="font-bold">&ldquo;{eventName}&rdquo;</span>.
+              </>
+            ) : (
+              "Así puedes recuperar el acceso a tus eventos aunque pierdas el link."
+            )}
           </p>
         </div>
 
-        <SignupForm />
+        <SignupForm eventName={eventName} />
 
         <p className="text-sm text-muted">
           ¿Ya tienes cuenta?{" "}
