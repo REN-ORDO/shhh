@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createEventForUser } from "@/lib/actions/events";
 
 export interface AuthFormState {
   error?: string;
@@ -64,6 +65,17 @@ export async function signUpAction(
     return {
       info: "¡Cuenta creada! Revisa tu email para confirmar la cuenta antes de iniciar sesión.",
     };
+  }
+
+  // Si el usuario llegó acá desde "Crea tu evento" sin sesión, el nombre que
+  // ya había escrito viaja como campo oculto — lo creamos de una para no
+  // obligarlo a escribirlo de nuevo (y para que no crea que ya lo creó).
+  const eventName = String(formData.get("eventName") ?? "").trim();
+  if (eventName && data.user) {
+    const result = await createEventForUser(data.user, eventName);
+    if (result.error) {
+      return { error: result.error };
+    }
   }
 
   redirect("/admin");

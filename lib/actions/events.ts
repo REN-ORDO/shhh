@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import type { User } from "@supabase/supabase-js";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isValidUuid } from "@/lib/validate";
@@ -13,24 +14,18 @@ export interface FormState {
 }
 
 /**
- * Crea un nuevo evento y redirige al panel de administración.
- * Requiere sesión: sin usuario logueado, redirige a /signup para que el
- * evento quede siempre con `owner_id` seteado.
+ * Inserta el evento en la base y redirige al panel de administración.
+ * Devuelve un error legible si algo falla; si todo sale bien, esta función
+ * nunca retorna (redirect lanza internamente).
+ *
+ * Compartida por createEventAction (usuario ya logueado) y signUpAction
+ * (usuario recién registrado que venía de intentar crear un evento sin
+ * cuenta) para que el nombre del evento no se pierda entre ambos flujos.
  */
-export async function createEventAction(
-  _prevState: FormState,
-  formData: FormData
+export async function createEventForUser(
+  user: User,
+  name: string
 ): Promise<FormState> {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/signup");
-  }
-
-  const name = String(formData.get("name") ?? "").trim();
   const adminName = String(user.user_metadata?.name ?? "").trim();
   const adminEmail = String(user.email ?? "").trim();
 
@@ -66,6 +61,31 @@ export async function createEventAction(
   }
 
   return { error: "No se pudo crear el evento. Intenta de nuevo." };
+}
+
+/**
+ * Crea un nuevo evento y redirige al panel de administración.
+ * Requiere sesión: sin usuario logueado, redirige a /signup llevando el
+ * nombre del evento en la URL para no perder lo que el usuario ya escribió,
+ * y para que el evento quede siempre con `owner_id` seteado.
+ */
+export async function createEventAction(
+  _prevState: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const name = String(formData.get("name") ?? "").trim();
+
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    const query = name ? `?eventName=${encodeURIComponent(name)}` : "";
+    redirect(`/signup${query}`);
+  }
+
+  return createEventForUser(user, name);
 }
 
 /** Extrae un UUID de un link completo o de un id pegado tal cual. */

@@ -8,11 +8,17 @@ import { PasswordInput } from "@/components/PasswordInput";
 
 const initialState: AuthFormState = {};
 
-export function SignupForm() {
+interface SignupFormProps {
+  /** Nombre de evento que el usuario ya había escrito antes de registrarse. */
+  eventName?: string;
+}
+
+export function SignupForm({ eventName }: SignupFormProps = {}) {
   const [state, formAction, pending] = useActionState(signUpAction, initialState);
 
   return (
     <form action={formAction} className="nb-card p-6 flex flex-col gap-4 w-full">
+      {eventName && <input type="hidden" name="eventName" value={eventName} />}
       <div className="flex flex-col gap-1">
         <label htmlFor="name" className="text-sm font-bold">
           Tu nombre
