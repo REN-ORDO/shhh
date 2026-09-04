@@ -7,7 +7,7 @@ export default function NotFound() {
     <div className="flex flex-1 flex-col items-center justify-center gap-6 px-6 py-16 text-center">
       <span className="nb-pill">
         <Gift className="size-3.5" aria-hidden="true" />
-        Amigo Secreto
+        Shhh
       </span>
 
       <div className="nb-icon-circle w-20 h-20">

@@ -13,7 +13,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
     <div className="flex flex-col min-h-screen items-center justify-center px-6 py-12 gap-4">
       <Link href="/" className="text-lg font-extrabold flex items-center gap-2">
         <Gift className="size-5" aria-hidden="true" />
-        Amigo Secreto
+        Shhh
       </Link>
 
       <div className="flex flex-col items-center gap-6 w-full max-w-md">

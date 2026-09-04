@@ -60,7 +60,7 @@ export default async function Home() {
       <header className="w-full px-6 py-5 flex items-center justify-between max-w-5xl mx-auto">
         <span className="text-lg font-extrabold flex items-center gap-2">
           <Gift className="size-5" aria-hidden="true" />
-          Amigo Secreto
+          Shhh
         </span>
         {user ? (
           <Link href="/admin" className="nb-btn nb-btn-secondary px-4 py-2 text-sm">
@@ -80,7 +80,7 @@ export default async function Home() {
       <main className="flex flex-col gap-20 px-6 pb-20">
         {/* Hero */}
         <section className="max-w-3xl mx-auto text-center flex flex-col items-center gap-6 pt-8">
-          <span className="nb-pill">Amigo Secreto Virtual</span>
+          <span className="nb-pill">Shhh — Amigo Secreto Virtual</span>
           <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight">
             Organiza tu Amigo Secreto{" "}
             <span className="text-accent">sin planillas ni bolillero</span>
@@ -163,7 +163,7 @@ export default async function Home() {
       </main>
 
       <footer className="text-center text-sm text-muted py-8">
-        Amigo Secreto Virtual — organiza tu intercambio de regalos online.
+        Shhh — Amigo Secreto Virtual — organiza tu intercambio de regalos online.
       </footer>
     </div>
   );
