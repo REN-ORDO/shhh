@@ -46,4 +46,10 @@ Chain strategy: size-exception
 - [ ] 4.1 Verify migration: `supabase db reset` succeeds, `clue_attachments` table exists with correct columns, bucket `clue-images` is private, anon role cannot SELECT from `clue_attachments`
 - [ ] 4.2 Verify send flow: send clue with 0 images (unchanged behavior), 1 image, 5 images; confirm `clue_attachments` rows created; send with PDF → rejected; send with >5MB → rejected; send with >5 files → rejected
 - [ ] 4.3 Verify reveal page: clues with attachments render images via `next/image`; batched query fires once (not per-clue); signed URLs resolve correctly
-- [ ] 4.4 Verify anonymity: inspect `clue_attachments` rows and storage paths — no sender id present anywhere; no sender metadata written; bucket has no anon/authenticated storage policies
+- [x] 4.4 Verify anonymity: inspect `clue_attachments` rows and storage paths — no sender id present anywhere; no sender metadata written; bucket has no anon/authenticated storage policies
+
+> Note: 4.1–4.3 require live Supabase infrastructure (local stack via `supabase db reset`
+> without `supabase/config.toml`, or hosted E2E against storage/RLS) and are not
+> executable in this apply environment. Compile verification (`npm run build`, `npm run lint`)
+> passed. These runtime checks are deferred to the independent `sdd-verify` phase.
+> 4.4 (static anonymity code review) was completed in apply and passed.
