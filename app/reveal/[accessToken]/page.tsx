@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { Hand, Gift } from "lucide-react";
-import Image from "next/image";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { isValidUuid } from "@/lib/validate";
 import { SendClueForm } from "@/components/SendClueForm";
+import { ClueAttachment } from "@/components/ClueAttachment";
 import type { ClueAttachmentRow } from "@/lib/types";
 
 const ATTACH_BUCKET = "clue-images";
@@ -157,18 +157,11 @@ export default async function RevealPage({
                     >
                       <p>{clue.message}</p>
                       {attachmentsByClue.get(clue.id)?.map((att) => (
-                        <div
+                        <ClueAttachment
                           key={att.id}
-                          className="relative w-full aspect-video overflow-hidden rounded-md"
-                        >
-                          <Image
-                            src={att.signedUrl}
-                            alt="Imagen adjunta a la pista"
-                            fill
-                            sizes="(min-width: 640px) 576px, 100vw"
-                            className="object-cover"
-                          />
-                        </div>
+                          src={att.signedUrl}
+                          alt="Imagen adjunta a la pista"
+                        />
                       ))}
                     </li>
                   ))}
