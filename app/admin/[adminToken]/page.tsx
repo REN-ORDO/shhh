@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { headers } from "next/headers";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { isValidUuid } from "@/lib/validate";
+import { getSiteUrl } from "@/lib/site-url";
 import { AutoRefresh } from "@/components/AutoRefresh";
 import { AddParticipantForm } from "@/components/AddParticipantForm";
 import { ParticipantRow } from "@/components/ParticipantRow";
@@ -83,9 +84,7 @@ export default async function AdminPage({
   }
 
   const headersList = await headers();
-  const host = headersList.get("host");
-  const protocol = host?.startsWith("localhost") ? "http" : "https";
-  const origin = host ? `${protocol}://${host}` : "";
+  const origin = getSiteUrl(headersList.get("host"));
 
   const joinPath = `/join/${event.id}`;
   const joinLink = `${origin}${joinPath}`;
