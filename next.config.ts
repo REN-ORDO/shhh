@@ -19,6 +19,16 @@ function supabaseStorageHost(): string {
 }
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      // Por defecto Next.js corta el body de una Server Action a 1 MB, muy
+      // por debajo de una sola imagen adjunta. `sendClueAction` acepta
+      // varios adjuntos con hasta MAX_TOTAL_ATTACH_BYTES (ver lib/validate.ts)
+      // combinados, así que el límite de la plataforma tiene que ser al
+      // menos eso más margen para el resto del multipart body.
+      bodySizeLimit: "4.5mb",
+    },
+  },
   images: {
     remotePatterns: [
       {

@@ -8,6 +8,7 @@ import {
   getExtensionForMime,
   MAX_ATTACH_BYTES,
   MAX_ATTACH_COUNT,
+  MAX_TOTAL_ATTACH_BYTES,
 } from "@/lib/validate";
 import type { FormState } from "@/lib/actions/events";
 
@@ -142,13 +143,18 @@ function validateAttachments(files: File[]): string | null {
   if (files.length > MAX_ATTACH_COUNT) {
     return `Podés adjuntar hasta ${MAX_ATTACH_COUNT} imágenes.`;
   }
+  let totalBytes = 0;
   for (const file of files) {
     if (!isValidImageMime(file.type)) {
       return "Solo se aceptan imágenes (JPG, PNG, GIF o WebP).";
     }
     if (file.size > MAX_ATTACH_BYTES) {
-      return "Cada imagen debe pesar menos de 5 MB.";
+      return "Cada imagen debe pesar menos de 4 MB.";
     }
+    totalBytes += file.size;
+  }
+  if (totalBytes > MAX_TOTAL_ATTACH_BYTES) {
+    return "El total de imágenes adjuntas no puede superar 4 MB.";
   }
   return null;
 }
