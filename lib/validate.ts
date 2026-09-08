@@ -18,8 +18,18 @@ export const ALLOWED_IMAGE_MIME = new Set<string>([
   "image/webp",
 ]);
 
-/** Tamaño máximo por archivo (5 MB). */
-export const MAX_ATTACH_BYTES = 5 * 1024 * 1024;
+/** Tamaño máximo por archivo (4 MB). */
+export const MAX_ATTACH_BYTES = 4 * 1024 * 1024;
+
+/**
+ * Tamaño máximo combinado de todos los adjuntos de un mismo envío (4 MB).
+ * Los adjuntos viajan como parte del body de una Server Action, y Vercel
+ * rechaza requests de Serverless Functions por encima de ~4.5 MB (ver
+ * bodySizeLimit en next.config.ts) — este tope se mantiene por debajo de
+ * ese límite de la plataforma para que el envío nunca se corte a mitad de
+ * camino, con o sin imágenes.
+ */
+export const MAX_TOTAL_ATTACH_BYTES = 4 * 1024 * 1024;
 
 /** Cantidad máxima de adjuntos por pista. */
 export const MAX_ATTACH_COUNT = 5;

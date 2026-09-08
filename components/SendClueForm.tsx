@@ -6,10 +6,15 @@ import { sendClueAction } from "@/lib/actions/clues";
 import {
   MAX_ATTACH_BYTES,
   MAX_ATTACH_COUNT,
+  MAX_TOTAL_ATTACH_BYTES,
 } from "@/lib/validate";
 import type { FormState } from "@/lib/actions/events";
 
 const initialState: FormState = {};
+
+function totalBytes(files: File[]): number {
+  return files.reduce((sum, f) => sum + f.size, 0);
+}
 
 // Los MIME se filtran en el input de archivos, pero este set se usa para la
 // vista previa (object URLs) y como guardia del lado del cliente.
@@ -46,7 +51,9 @@ export function SendClueForm({ accessToken }: { accessToken: string }) {
     if (files.length > MAX_ATTACH_COUNT) {
       setClientError(`Podés adjuntar hasta ${MAX_ATTACH_COUNT} imágenes.`);
     } else if (files.some((f) => f.size > MAX_ATTACH_BYTES)) {
-      setClientError("Cada imagen debe pesar menos de 5 MB.");
+      setClientError("Cada imagen debe pesar menos de 4 MB.");
+    } else if (totalBytes(files) > MAX_TOTAL_ATTACH_BYTES) {
+      setClientError("El total de imágenes adjuntas no puede superar 4 MB.");
     } else {
       setClientError(null);
     }
@@ -62,7 +69,12 @@ export function SendClueForm({ accessToken }: { accessToken: string }) {
     }
     if (selectedFiles.some((f) => f.size > MAX_ATTACH_BYTES)) {
       e.preventDefault();
-      setClientError("Cada imagen debe pesar menos de 5 MB.");
+      setClientError("Cada imagen debe pesar menos de 4 MB.");
+      return;
+    }
+    if (totalBytes(selectedFiles) > MAX_TOTAL_ATTACH_BYTES) {
+      e.preventDefault();
+      setClientError("El total de imágenes adjuntas no puede superar 4 MB.");
       return;
     }
     if (selectedFiles.some((f) => !ALLOWED_IMAGE_MIME.has(f.type))) {
